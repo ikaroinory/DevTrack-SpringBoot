@@ -118,7 +118,8 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.updateById(task);
     }
 
-    public void updatePrincipal(String requesterUUID, String taskUUID, String principalUUID) throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+    public void updatePrincipal(String requesterUUID, String taskUUID, String principalUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID, principalUUID);
 
         updateTaskValidator(requesterUUID, taskUUID);
@@ -126,6 +127,32 @@ public class TaskServiceImpl implements TaskService {
         Task task = new Task();
         task.setUuid(taskUUID);
         task.setPrincipal(principalUUID);
+
+        taskDAO.updateById(task);
+    }
+
+    public void updateStartTime(String requesterUUID, String taskUUID, LocalDateTime startTime)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setStartTime(startTime);
+
+        taskDAO.updateById(task);
+    }
+
+    public void updateDeadline(String requesterUUID, String taskUUID, LocalDateTime deadline)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setStartTime(deadline);
 
         taskDAO.updateById(task);
     }

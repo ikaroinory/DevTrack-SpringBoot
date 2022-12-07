@@ -9,6 +9,7 @@ import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.util.PageInformation;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TaskService {
@@ -77,5 +78,29 @@ public interface TaskService {
      * @since 2022-12-07
      */
     void updatePrincipal(String requesterUUID, String taskUUID, String principalUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务开始时间。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param startTime     新任务开始时间。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    void updateStartTime(String requesterUUID, String taskUUID, LocalDateTime startTime)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务截止时间。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param deadline      新任务截止时间。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    void updateDeadline(String requesterUUID, String taskUUID, LocalDateTime deadline)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 }
