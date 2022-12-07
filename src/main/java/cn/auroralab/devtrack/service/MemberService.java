@@ -37,13 +37,14 @@ public interface MemberService extends IService<Member> {
     /**
      * 修改成员角色。
      *
-     * @param recordUUID 项目-用户映射记录UUID。
-     * @param roleUUID   角色UUID。
+     * @param requesterUUID 请求人UUID。
+     * @param recordUUID    项目-用户映射记录UUID。
+     * @param roleUUID      角色UUID。
      * @author Guanyu Hu
      * @since 2022-12-01
      */
-    void updateMemberRole(String recordUUID, String roleUUID)
-            throws RequiredParametersIsEmptyException, RecordNotFoundException;
+    void updateMemberRole(String requesterUUID, String recordUUID, String roleUUID)
+            throws RequiredParametersIsEmptyException, RecordNotFoundException, PermissionDeniedException;
 
     /**
      * 获取项目成员信息。

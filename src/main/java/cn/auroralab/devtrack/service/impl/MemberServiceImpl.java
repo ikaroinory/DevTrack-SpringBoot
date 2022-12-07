@@ -55,21 +55,26 @@ public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements
         memberDAO.insert(member);
     }
 
-    public void updateMemberRole(String recordUUID, String roleUUID)
-            throws RequiredParametersIsEmptyException, RecordNotFoundException {
+    public void updateMemberRole(String requesterUUID, String recordUUID, String roleUUID)
+            throws RequiredParametersIsEmptyException, RecordNotFoundException, PermissionDeniedException {
         Validator.notEmpty(recordUUID, roleUUID);
 
         QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Member.UUID, recordUUID);
 
-        if (memberDAO.selectById(recordUUID) == null)
+        Member member = memberDAO.selectById(recordUUID);
+        if (member == null)
             throw new RecordNotFoundException();
 
-        Member member = new Member();
-        member.setUuid(recordUUID);
-        member.setRole(roleUUID);
+        Role role = roleDAO.getRoleByUserInProject(requesterUUID, member.getFromProject());
+        if (role == null || !role.getUpdateMember())
+            throw new PermissionDeniedException();
 
-        memberDAO.updateById(member);
+        Member newMember = new Member();
+        newMember.setUuid(recordUUID);
+        newMember.setRole(roleUUID);
+
+        memberDAO.updateById(newMember);
     }
 
     public List<MemberDTO> getMemberList(String projectUUID)

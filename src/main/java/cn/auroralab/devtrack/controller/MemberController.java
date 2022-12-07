@@ -38,11 +38,13 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public StatusCode updateMemberRole(String recordUUID, String roleUUID) {
+    public StatusCode updateMemberRole(@RequestHeader(value = "Authorization") String authorization, String recordUUID, String roleUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            memberService.updateMemberRole(recordUUID, roleUUID);
+            memberService.updateMemberRole(requesterUUID, recordUUID, roleUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
