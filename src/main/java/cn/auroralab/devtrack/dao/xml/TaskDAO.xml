@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.auroralab.devtrack.dao.TaskDAO">
+    <select id="getTaskList" resultType="cn.auroralab.devtrack.dto.TaskDTO">
+        select *
+        from task_information
+        where fromProjectUUID = #{projectUUID}
+    </select>
+    <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapData">
+        select date_format(finish_time, '%Y-%m-%d') as date, count(*) as count
+        from tasks,
+             task_members
+        where task_members.user_uuid = #{userUUID}
+          and tasks.task_uuid = task_members.task_uuid
+          and tasks.finish_time > date_sub(now(), interval 1 year)
+        group by date
+        order by date;
+    </select>
+</mapper>

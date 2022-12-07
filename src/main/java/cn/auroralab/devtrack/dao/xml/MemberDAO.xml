@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.auroralab.devtrack.dao.MemberDAO">
+    <insert id="newDefaultRecords">
+        insert ignore into project_members (record_uuid, from_project, user_uuid, role)
+        select
+        replace(uuid(), '-', '') as record_uuid,
+        #{projectUUID} as from_project,
+        user_uuid as user_uuid,
+        (select default_role from projects where project_uuid = #{projectUUID}) as role
+        from accounts
+        where username in
+        <foreach collection="usernameList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </insert>
+    <insert id="newRecords">
+        insert ignore into project_members (record_uuid, from_project, user_uuid, role)
+        select
+        replace(uuid(), '-', '') as record_uuid,
+        #{projectUUID} as from_project,
+        user_uuid as user_uuid,
+        #{roleUUID} as role
+        from accounts
+        where username in
+        <foreach collection="usernameList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </insert>
+    <select id="getMemberList" resultType="cn.auroralab.devtrack.dto.MemberDTO">
+        select recordUUID,
+               projectUUID,
+               userUUID,
+               username,
+               nickname,
+               avatar,
+               nicknameInProject,
+               roleUUID,
+               roleName,
+               joinTime
+        from project_member_information
+        where projectUUID = #{uuid}
+        order by joinTime
+    </select>
+    <select id="countMemberWithRole" resultType="java.lang.Long">
+        select count(*)
+        from project_members
+        where role = #{roleUUID}
+    </select>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.auroralab.devtrack.dao.RoleDAO">
+    <select id="getRoleByUserInProject" resultMap="mybatis-plus_Role">
+        select project_roles.*
+        from project_members,
+             project_roles
+        where project_members.user_uuid = #{userUUID}
+          and project_members.from_project = #{projectUUID}
+          and project_roles.from_project = #{projectUUID}
+          and project_members.role = project_roles.role_uuid
+    </select>
+    <select id="getProjectUUIDOfRole" resultType="java.lang.String">
+        select from_project
+        from project_roles
+        where role_uuid = #{roleUUID}
+    </select>
+</mapper>

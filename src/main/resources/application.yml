@@ -1,0 +1,30 @@
+server:
+    port: 8181
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://auroralab.mysql.rds.aliyuncs.com:3306/devtrack_database
+        username: devtrack
+        password: DevTrack@2022
+    mail:
+        host: smtp.163.com
+        port: 25
+        protocol: smtp
+        username: auroralab2022@163.com
+        password: IKVZMZTBDQRMWZPS
+        properties:
+            mail:
+                smtp.auth: true
+                from: name
+    jackson:
+        serialization:
+            write-enums-using-to-string: true
+mybatis-plus:
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    mapper-locations: cn/auroralab/devtrack/dao/xml/*.xml
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql

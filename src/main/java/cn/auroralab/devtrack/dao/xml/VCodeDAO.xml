@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.auroralab.devtrack.dao.VCodeDAO">
+    <resultMap id="vCodeRecord" type="cn.auroralab.devtrack.po.VCodeRecord">
+        <id property="uuid" column="task_uuid"/>
+        <result property="time" column="task_time"/>
+        <result property="type" column="task_type"/>
+        <result property="email" column="email"/>
+        <result property="vCode" column="vcode"/>
+        <result property="validTime" column="valid_time"/>
+    </resultMap>
+    <select id="getLatestRecord" resultMap="vCodeRecord">
+        select *
+        from vcode_records
+        where task_type = ${type.code}
+          and email = #{email}
+          and task_time > date_sub(now(), interval valid_time minute)
+        order by task_time desc limit 1;
+    </select>
+</mapper>
