@@ -2,6 +2,7 @@ package cn.auroralab.devtrack.service;
 
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.util.PageInformation;
@@ -18,7 +19,7 @@ public interface TaskService {
      * @since 2022-11-09
      */
     void newTask(String creatorUUID, NewTaskForm form)
-            throws RequiredParametersIsEmptyException;
+            throws RequiredParametersIsEmptyException, PermissionDeniedException;
 
     /**
      * 获取一页项目任务信息。
