@@ -126,7 +126,7 @@ public class TaskController {
         return statusCode;
     }
 
-    @PostMapping("/updateStartTime")
+    @PostMapping("/updateDeadline")
     public StatusCode updateDeadline(@RequestHeader(value = "Authorization") String authorization, String taskUUID, LocalDateTime deadline) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
