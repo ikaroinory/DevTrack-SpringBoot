@@ -1,5 +1,6 @@
 package cn.auroralab.devtrack.service.impl;
 
+import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dao.TaskDAO;
 import cn.auroralab.devtrack.dao.TaskMemberDAO;
 import cn.auroralab.devtrack.dto.HeatMapData;
@@ -7,8 +8,10 @@ import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.form.NewTaskForm;
+import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.po.Task;
 import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.*;
@@ -24,14 +27,22 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskDAO taskDAO;
     private final TaskMemberDAO taskMemberDAO;
+    private final RoleDAO roleDAO;
 
-    public TaskServiceImpl(TaskDAO taskDAO, TaskMemberDAO taskMemberDAO) {
+    public TaskServiceImpl(TaskDAO taskDAO, TaskMemberDAO taskMemberDAO, RoleDAO roleDAO) {
         this.taskDAO = taskDAO;
         this.taskMemberDAO = taskMemberDAO;
+        this.roleDAO = roleDAO;
     }
 
-    public void newTask(String creatorUUID, NewTaskForm form) {
+    public void newTask(String creatorUUID, NewTaskForm form)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException {
         Validator.notEmpty(creatorUUID, form.getFromProject(), form.getPrincipal());
+
+        Role role = roleDAO.getRoleByUserInProject(creatorUUID, form.getFromProject());
+
+        if (role == null || !role.getCreateTask())
+            throw new PermissionDeniedException();
 
         Task task = new Task();
         task.setUuid(BitstreamGenerator.parseUUID());

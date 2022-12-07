@@ -65,11 +65,13 @@ public class ProjectController {
     }
 
     @PostMapping("/update")
-    public StatusCode update(UpdateProjectInformationForm form) {
+    public StatusCode update(@RequestHeader(value = "Authorization") String authorization, UpdateProjectInformationForm form) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            projectService.update(form);
+            projectService.update(requesterUUID, form);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }

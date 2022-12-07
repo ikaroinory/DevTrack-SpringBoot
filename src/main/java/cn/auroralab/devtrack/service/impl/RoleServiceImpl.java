@@ -60,7 +60,8 @@ public class RoleServiceImpl implements RoleService {
                 recordUUID,
                 projectUUID,
                 roleName,
-                true,
+                true, true, true,
+                true, true,
                 true, true, true,
                 true, true, true
         );
@@ -73,14 +74,7 @@ public class RoleServiceImpl implements RoleService {
             throws RequiredParametersIsEmptyException {
         String recordUUID = BitstreamGenerator.parseUUID();
 
-        Role role = new Role(
-                recordUUID,
-                projectUUID,
-                roleName,
-                false,
-                true, true, true,
-                false, false, false
-        );
+        Role role = new Role(recordUUID, projectUUID, roleName);
         roleDAO.insert(role);
 
         return recordUUID;
@@ -98,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
 
         Role newRole = new Role();
         newRole.setProject(null);
-        newRole.setInviteMembers(role.getInviteMembers());
+        newRole.setInviteMember(role.getInviteMember());
         newRole.setCreateTask(role.getCreateTask());
         newRole.setUpdateTask(role.getUpdateTask());
         newRole.setDeleteTask(role.getDeleteTask());

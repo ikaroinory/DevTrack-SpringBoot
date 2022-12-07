@@ -5,6 +5,7 @@ import cn.auroralab.devtrack.dto.MemberDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.service.MemberService;
+import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +22,29 @@ public class MemberController {
     }
 
     @PostMapping("/add")
-    public ResponseVO<Integer> addMembers(String projectUUID, @RequestParam List<String> usernameList) {
-        return new ResponseVO<>(StatusCode.SUCCESS, memberService.newDefaultRecords(usernameList, projectUUID));
+    public ResponseVO<Integer> addMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> usernameList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+        Integer count = null;
+
+        try {
+            count = memberService.newDefaultRecords(requesterUUID, projectUUID, usernameList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, count);
     }
 
     @PostMapping("/update")
-    public StatusCode updateMemberRole(String recordUUID, String roleUUID) {
+    public StatusCode updateMemberRole(@RequestHeader(value = "Authorization") String authorization, String recordUUID, String roleUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            memberService.updateMemberRole(recordUUID, roleUUID);
+            memberService.updateMemberRole(requesterUUID, recordUUID, roleUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
@@ -39,8 +53,18 @@ public class MemberController {
     }
 
     @PostMapping("/remove")
-    public StatusCode removeMembers(@RequestParam List<String> recordUUIDList) {
-        return memberService.removeByIds(recordUUIDList) ? StatusCode.SUCCESS : StatusCode.UNKNOWN;
+    public StatusCode removeMembers(@RequestHeader(value = "Authorization") String authorization, @RequestParam List<String> recordUUIDList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            memberService.removeMembers(requesterUUID, recordUUIDList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
     }
 
     @GetMapping("/getOnePageFromProject")
