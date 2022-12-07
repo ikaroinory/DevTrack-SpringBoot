@@ -2,6 +2,7 @@ package cn.auroralab.devtrack.service;
 
 import cn.auroralab.devtrack.dto.ProjectDTO;
 import cn.auroralab.devtrack.exception.project.ProjectNotFoundException;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.form.UpdateProjectInformationForm;
 import cn.auroralab.devtrack.po.Project;
@@ -24,8 +25,8 @@ public interface ProjectService {
      * @author Guanyu Hu
      * @since 2022-11-18
      */
-    void update(UpdateProjectInformationForm form)
-            throws RequiredParametersIsEmptyException, ProjectNotFoundException;
+    void update(String requesterUUID, UpdateProjectInformationForm form)
+            throws RequiredParametersIsEmptyException, ProjectNotFoundException, PermissionDeniedException;
 
     /**
      * 获取项目信息。

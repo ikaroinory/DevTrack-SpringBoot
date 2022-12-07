@@ -60,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
                 recordUUID,
                 projectUUID,
                 roleName,
-                true,
+                true, true, true,
                 true, true,
                 true, true, true,
                 true, true, true
