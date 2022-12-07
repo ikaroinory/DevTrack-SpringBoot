@@ -13,6 +13,7 @@ import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -103,6 +104,36 @@ public class TaskController {
 
         try {
             taskService.updatePrincipal(requesterUUID, taskUUID, principalUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updateStartTime")
+    public StatusCode updateStartTime(@RequestHeader(value = "Authorization") String authorization, String taskUUID, LocalDateTime startTime) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateStartTime(requesterUUID, taskUUID, startTime);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updateStartTime")
+    public StatusCode updateDeadline(@RequestHeader(value = "Authorization") String authorization, String taskUUID, LocalDateTime deadline) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateDeadline(requesterUUID, taskUUID, deadline);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
