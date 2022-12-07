@@ -35,12 +35,13 @@ public interface AccountService {
      * 自动登录。
      *
      * @param userUUID 用户UUID。
+     * @return 用户头像。
      * @throws RequiredParametersIsEmptyException 必填参数为空。
      * @throws UserNotFoundException              用户不存在。
      * @author Guanyu Hu
      * @since 2022-12-04
      */
-    void autoSignIn(String userUUID)
+    byte[] autoSignIn(String userUUID)
             throws RequiredParametersIsEmptyException, UserNotFoundException;
 
     /**
