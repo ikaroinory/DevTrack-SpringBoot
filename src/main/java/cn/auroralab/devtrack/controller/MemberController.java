@@ -53,8 +53,18 @@ public class MemberController {
     }
 
     @PostMapping("/remove")
-    public StatusCode removeMembers(@RequestParam List<String> recordUUIDList) {
-        return memberService.removeByIds(recordUUIDList) ? StatusCode.SUCCESS : StatusCode.UNKNOWN;
+    public StatusCode removeMembers(@RequestHeader(value = "Authorization") String authorization, @RequestParam List<String> recordUUIDList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            memberService.removeMembers(requesterUUID, recordUUIDList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
     }
 
     @GetMapping("/getOnePageFromProject")

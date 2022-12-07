@@ -58,6 +58,17 @@ public interface MemberService extends IService<Member> {
             throws RequiredParametersIsEmptyException;
 
     /**
+     * 移除项目成员。
+     *
+     * @param requestUUID    请求人UUID。
+     * @param recordUUIDList 映射记录UUID列表。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    void removeMembers(String requestUUID, List<String> recordUUIDList)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException;
+
+    /**
      * 获取一页项目成员信息。
      *
      * @param projectUUID 项目UUID。

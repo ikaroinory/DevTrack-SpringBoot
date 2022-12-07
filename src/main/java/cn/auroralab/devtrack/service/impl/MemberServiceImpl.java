@@ -77,6 +77,21 @@ public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements
         memberDAO.updateById(newMember);
     }
 
+    public void removeMembers(String requestUUID, List<String> recordUUIDList)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException {
+        Validator.notEmpty(requestUUID);
+        Validator.notEmpty(recordUUIDList);
+
+        String projectUUID = memberDAO.selectById(recordUUIDList.get(0)).getFromProject();
+
+        Role role = roleDAO.getRoleByUserInProject(requestUUID, projectUUID);
+
+        if (role == null || !role.getRemoveMember())
+            throw new PermissionDeniedException();
+
+        removeByIds(recordUUIDList);
+    }
+
     public List<MemberDTO> getMemberList(String projectUUID)
             throws RequiredParametersIsEmptyException {
         Validator.notEmpty(projectUUID);
