@@ -1,6 +1,7 @@
 package cn.auroralab.devtrack.service;
 
 import cn.auroralab.devtrack.dto.MemberDTO;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RecordNotFoundException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.po.Member;
@@ -13,13 +14,15 @@ public interface MemberService extends IService<Member> {
     /**
      * 插入一系列默认的用户-项目映射。
      *
-     * @param usernameList 用户名列表
-     * @param projectUUID  项目uuid。
+     * @param requesterUUID 请求人UUID。
+     * @param projectUUID   项目UUID。
+     * @param usernameList  用户名列表
      * @return 成功添加的行数。
      * @author Guanyu Hu
      * @since 2022-12-04
      */
-    int newDefaultRecords(List<String> usernameList, String projectUUID);
+    int newDefaultRecords(String requesterUUID, String projectUUID, List<String> usernameList)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException;
 
     /**
      * 插入一条用户-项目映射。

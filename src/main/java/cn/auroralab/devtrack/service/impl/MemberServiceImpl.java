@@ -1,10 +1,13 @@
 package cn.auroralab.devtrack.service.impl;
 
 import cn.auroralab.devtrack.dao.MemberDAO;
+import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dto.MemberDTO;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RecordNotFoundException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.po.Member;
+import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.service.MemberService;
 import cn.auroralab.devtrack.util.BitstreamGenerator;
 import cn.auroralab.devtrack.util.PageInformation;
@@ -22,12 +25,22 @@ import java.util.List;
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements MemberService {
     private final MemberDAO memberDAO;
+    private final RoleDAO roleDAO;
 
-    public MemberServiceImpl(MemberDAO memberDAO) {
+    public MemberServiceImpl(MemberDAO memberDAO, RoleDAO roleDAO) {
         this.memberDAO = memberDAO;
+        this.roleDAO = roleDAO;
     }
 
-    public int newDefaultRecords(List<String> usernameList, String projectUUID) {
+    public int newDefaultRecords(String requesterUUID, String projectUUID, List<String> usernameList)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException {
+        Validator.notEmpty(projectUUID);
+
+        Role role = roleDAO.getRoleByUserInProject(requesterUUID, projectUUID);
+
+        if (role == null || !role.getInviteMember())
+            throw new PermissionDeniedException();
+
         return memberDAO.newDefaultRecords(usernameList, projectUUID);
     }
 

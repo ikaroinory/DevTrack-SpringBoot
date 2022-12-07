@@ -5,6 +5,7 @@ import cn.auroralab.devtrack.dto.MemberDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.service.MemberService;
+import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,19 @@ public class MemberController {
     }
 
     @PostMapping("/add")
-    public ResponseVO<Integer> addMembers(String projectUUID, @RequestParam List<String> usernameList) {
-        return new ResponseVO<>(StatusCode.SUCCESS, memberService.newDefaultRecords(usernameList, projectUUID));
+    public ResponseVO<Integer> addMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> usernameList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+        Integer count = null;
+
+        try {
+            count = memberService.newDefaultRecords(requesterUUID, projectUUID, usernameList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, count);
     }
 
     @PostMapping("/update")
