@@ -5,6 +5,7 @@ import cn.auroralab.devtrack.dao.TaskDAO;
 import cn.auroralab.devtrack.dao.TaskMemberDAO;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
+import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
@@ -74,6 +75,13 @@ public class TaskServiceImpl implements TaskService {
             pageInfo = new PageInfo<>(list);
         }
         return PaginationUtils.parsePageInformation(pageInfo);
+    }
+
+    public List<TaskMemberDTO> getTaskMemberList(String taskUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(taskUUID);
+
+        return taskMemberDAO.getTaskMemberList(taskUUID);
     }
 
     public List<HeatMapData> getTaskCountFinishedInThePastYear(String userUUID)

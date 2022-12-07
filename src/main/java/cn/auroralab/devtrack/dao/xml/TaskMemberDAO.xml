@@ -10,4 +10,14 @@
             #{taskUUID}
         </foreach>
     </insert>
+    <select id="getTaskMemberList" resultType="cn.auroralab.devtrack.dto.TaskMemberDTO">
+        select record_uuid        as recordUUID,
+               accounts.user_uuid as userUUID,
+               nickname,
+               avatar
+        from task_members,
+             accounts
+        where accounts.user_uuid = task_members.user_uuid
+          and task_uuid = #{taskUUID};
+    </select>
 </mapper>

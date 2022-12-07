@@ -3,6 +3,7 @@ package cn.auroralab.devtrack.controller;
 import cn.auroralab.devtrack.annotation.SkipTokenVerification;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
+import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.form.NewTaskForm;
@@ -37,7 +38,6 @@ public class TaskController {
     }
 
     @GetMapping("/getOnePageFromProject")
-    @SkipTokenVerification
     public ResponseVO<PageInformation<TaskDTO>> getTaskList(String projectUUID, int pageNum, int pageSize) {
         StatusCode statusCode = StatusCode.SUCCESS;
         PageInformation<TaskDTO> pageInformation = null;
@@ -49,6 +49,20 @@ public class TaskController {
         }
 
         return new ResponseVO<>(statusCode, pageInformation);
+    }
+
+    @GetMapping("/getTaskMembers")
+    public ResponseVO<List<TaskMemberDTO>> getTaskMemberList(String taskUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        List<TaskMemberDTO> list = null;
+
+        try {
+            list = taskService.getTaskMemberList(taskUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, list);
     }
 
     @GetMapping("/getHeatMap")

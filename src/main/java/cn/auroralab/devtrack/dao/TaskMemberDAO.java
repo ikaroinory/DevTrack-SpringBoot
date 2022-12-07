@@ -1,5 +1,6 @@
 package cn.auroralab.devtrack.dao;
 
+import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,4 +16,13 @@ public interface TaskMemberDAO {
      * @since 2022-11-22
      */
     void newRecords(List<String> userUUIDList, String taskUUID);
+
+    /**
+     * 获取任务成员列表。
+     *
+     * @param taskUUID 任务UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    List<TaskMemberDTO> getTaskMemberList(String taskUUID);
 }

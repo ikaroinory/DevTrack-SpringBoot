@@ -2,6 +2,7 @@ package cn.auroralab.devtrack.service;
 
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
+import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.form.NewTaskForm;
@@ -31,6 +32,16 @@ public interface TaskService {
      * @since 2022-11-22
      */
     PageInformation<TaskDTO> getTaskList(String projectUUID, int pageNum, int pageSize)
+            throws RequiredParametersIsEmptyException;
+
+    /**
+     * 获取任务成员列表。
+     *
+     * @param taskUUID 任务UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    List<TaskMemberDTO> getTaskMemberList(String taskUUID)
             throws RequiredParametersIsEmptyException;
 
     /**
