@@ -11,6 +11,7 @@ import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
+import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.po.Task;
@@ -34,6 +35,19 @@ public class TaskServiceImpl implements TaskService {
         this.taskDAO = taskDAO;
         this.taskMemberDAO = taskMemberDAO;
         this.roleDAO = roleDAO;
+    }
+
+    private void updateTaskValidator(String userUUID, String taskUUID)
+            throws TaskNotFoundException, PermissionDeniedException {
+        Task task = taskDAO.selectById(taskUUID);
+
+        if (task == null)
+            throw new TaskNotFoundException();
+
+        Role role = roleDAO.getRoleByUserInProject(userUUID, task.getFromProject());
+
+        if (role == null || !role.getUpdateTask())
+            throw new PermissionDeniedException();
     }
 
     public void newTask(String creatorUUID, NewTaskForm form)
@@ -89,5 +103,30 @@ public class TaskServiceImpl implements TaskService {
         Validator.notEmpty(userUUID);
 
         return taskDAO.getTaskCountFinishedInThePastYear(userUUID);
+    }
+
+    public void updateTitle(String requesterUUID, String taskUUID, String title)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID, title);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setTitle(title);
+
+        taskDAO.updateById(task);
+    }
+
+    public void updatePrincipal(String requesterUUID, String taskUUID, String principalUUID) throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID, principalUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setPrincipal(principalUUID);
+
+        taskDAO.updateById(task);
     }
 }

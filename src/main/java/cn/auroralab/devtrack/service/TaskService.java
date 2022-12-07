@@ -5,6 +5,7 @@ import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
+import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.util.PageInformation;
 
@@ -53,4 +54,28 @@ public interface TaskService {
      */
     List<HeatMapData> getTaskCountFinishedInThePastYear(String userUUID)
             throws RequiredParametersIsEmptyException;
+
+    /**
+     * 修改任务标题。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param title         新任务标题。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    void updateTitle(String requesterUUID, String taskUUID, String title)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务负责人。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param principalUUID 新负责人UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    void updatePrincipal(String requesterUUID, String taskUUID, String principalUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 }

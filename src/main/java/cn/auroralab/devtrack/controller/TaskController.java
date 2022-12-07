@@ -79,4 +79,34 @@ public class TaskController {
 
         return new ResponseVO<>(statusCode, list);
     }
+
+    @PostMapping("/updateTitle")
+    public StatusCode updateTitle(@RequestHeader(value = "Authorization") String authorization, String taskUUID, String title) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateTitle(requesterUUID, taskUUID, title);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updatePrincipal")
+    public StatusCode updatePrincipal(@RequestHeader(value = "Authorization") String authorization, String taskUUID, String principalUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updatePrincipal(requesterUUID, taskUUID, principalUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
 }

@@ -1,7 +1,7 @@
 package cn.auroralab.devtrack.controller;
 
 import cn.auroralab.devtrack.annotation.SkipTokenVerification;
-import cn.auroralab.devtrack.dao.RoleDAO;
+import cn.auroralab.devtrack.dao.TaskDAO;
 import cn.auroralab.devtrack.dao.VCodeDAO;
 import cn.auroralab.devtrack.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     public final VCodeDAO vCodeDAO;
     @Autowired
-    private RoleDAO roleDAO;
+    private TaskDAO taskDAO;
 
     public TestController(VCodeDAO vCodeDAO) {
         this.vCodeDAO = vCodeDAO;
@@ -28,7 +28,7 @@ public class TestController {
     @GetMapping("/test2")
     @SkipTokenVerification
     public Object test2() {
-        return roleDAO.getRoleByUserInProject("e64c6039e12244efb9894ad9f3cb272c", "4ccc26a6ca0d9f5c90967a2e55c60876");
+        return taskDAO.selectById("123456");
     }
 
     @GetMapping("/getTestToken")
