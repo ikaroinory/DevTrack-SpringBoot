@@ -168,14 +168,15 @@ public interface TaskService {
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 
     /**
-     * 完成任务。
+     * 设置任务完成状态。
      *
      * @param requesterUUID 请求人UUID。
      * @param taskUUID      任务UUID。
+     * @param finished      任务是否完成。
      * @author Guanyu Hu
      * @since 2022-12-08
      */
-    void finish(String requesterUUID, String taskUUID)
+    void finish(String requesterUUID, String taskUUID, boolean finished)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 
     /**

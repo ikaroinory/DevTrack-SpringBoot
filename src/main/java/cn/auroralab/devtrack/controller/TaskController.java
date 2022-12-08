@@ -220,13 +220,13 @@ public class TaskController {
     }
 
     @PostMapping("/finish")
-    public StatusCode finish(@RequestHeader(value = "Authorization") String authorization, String taskUUID) {
+    public StatusCode finish(@RequestHeader(value = "Authorization") String authorization, String taskUUID, boolean finished) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            taskService.finish(requesterUUID, taskUUID);
+            taskService.finish(requesterUUID, taskUUID, finished);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }

@@ -232,7 +232,7 @@ public class TaskServiceImpl implements TaskService {
             taskMemberDAO.newRecords(taskUUID, memberUUIDList);
     }
 
-    public void finish(String requesterUUID, String taskUUID)
+    public void finish(String requesterUUID, String taskUUID, boolean finished)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
 
@@ -240,7 +240,10 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = new Task();
         task.setUuid(taskUUID);
-        task.setFinishTime(LocalDateTime.now());
+        if (finished)
+            task.setFinishTime(LocalDateTime.now());
+        else
+            task.setFinishTime(null);
 
         taskDAO.updateById(task);
     }
