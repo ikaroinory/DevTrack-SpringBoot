@@ -261,6 +261,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = new Task();
         task.setUuid(taskUUID);
         task.setDeleted(true);
+        task.setDeleteTime(LocalDateTime.now());
 
         taskDAO.updateById(task);
     }
