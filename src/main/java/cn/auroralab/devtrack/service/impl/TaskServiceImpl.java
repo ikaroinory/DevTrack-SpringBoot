@@ -152,7 +152,7 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = new Task();
         task.setUuid(taskUUID);
-        task.setStartTime(deadline);
+        task.setDeadline(deadline);
 
         taskDAO.updateById(task);
     }

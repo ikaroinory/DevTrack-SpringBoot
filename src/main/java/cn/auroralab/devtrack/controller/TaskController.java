@@ -7,13 +7,13 @@ import cn.auroralab.devtrack.dto.TaskMemberDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.form.NewTaskForm;
+import cn.auroralab.devtrack.form.UpdateTaskTimeForm;
 import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -112,13 +112,13 @@ public class TaskController {
     }
 
     @PostMapping("/updateStartTime")
-    public StatusCode updateStartTime(@RequestHeader(value = "Authorization") String authorization, String taskUUID, LocalDateTime startTime) {
+    public StatusCode updateStartTime(@RequestHeader(value = "Authorization") String authorization, @RequestBody UpdateTaskTimeForm form) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            taskService.updateStartTime(requesterUUID, taskUUID, startTime);
+            taskService.updateStartTime(requesterUUID, form.getTaskUUID(), form.getTime());
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
@@ -127,13 +127,13 @@ public class TaskController {
     }
 
     @PostMapping("/updateDeadline")
-    public StatusCode updateDeadline(@RequestHeader(value = "Authorization") String authorization, String taskUUID, LocalDateTime deadline) {
+    public StatusCode updateDeadline(@RequestHeader(value = "Authorization") String authorization, @RequestBody UpdateTaskTimeForm form) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            taskService.updateDeadline(requesterUUID, taskUUID, deadline);
+            taskService.updateDeadline(requesterUUID, form.getTaskUUID(), form.getTime());
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
