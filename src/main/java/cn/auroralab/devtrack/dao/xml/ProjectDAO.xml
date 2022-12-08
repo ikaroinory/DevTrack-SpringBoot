@@ -3,9 +3,9 @@
 <mapper namespace="cn.auroralab.devtrack.dao.ProjectDAO">
     <select id="getList" resultType="cn.auroralab.devtrack.dto.ProjectDTO">
         select *,
-               if(temp.finishTime is not null, 3, if(startTime is null or startTime > now(), 1, 2)) as status,
-               ifnull(round((select count(*) from tasks where from_project = uuid and finish_time is not null) /
-                            (select count(*) from tasks where from_project = uuid), 2), 0)          as progress
+               if(temp.finishTime is not null, 3, if(startTime is null or startTime > now(), 1, 2))               as status,
+               ifnull(round((select count(*) from tasks where from_project = uuid and finish_time is not null and is_deleted = false) /
+                            (select count(*) from tasks where from_project = uuid and is_deleted = false), 4), 1) as progress
         from (select project_uuid        as uuid,
                      project_name        as name,
                      creator.user_uuid   as creatorUUID,

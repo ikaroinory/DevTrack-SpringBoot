@@ -39,6 +39,19 @@ public class Validator {
     }
 
     /**
+     * 非空断言。
+     *
+     * @param args 参数列表。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    public static void notNull(Object... args) throws RequiredParametersIsEmptyException {
+        for (Object arg : args)
+            if (arg == null)
+                throw new RequiredParametersIsEmptyException();
+    }
+
+    /**
      * 断言参数列表不等于指定值。
      *
      * @param num  指定值。

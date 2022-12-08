@@ -80,5 +80,5 @@ public class ProjectDTO {
     /**
      * 项目进度。百分制。
      */
-    private double progress;
+    private Double progress;
 }

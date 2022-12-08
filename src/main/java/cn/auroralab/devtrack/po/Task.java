@@ -4,10 +4,7 @@ import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.enumeration.TaskType;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -110,7 +107,7 @@ public class Task implements Serializable {
     /**
      * 任务完成时间。
      */
-    @TableField(value = FINISH_TIME)
+    @TableField(value = FINISH_TIME, updateStrategy = FieldStrategy.IGNORED)
     private LocalDateTime finishTime;
     /**
      * 任务删除时间。

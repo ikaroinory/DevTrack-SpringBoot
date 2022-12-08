@@ -1,5 +1,6 @@
 package cn.auroralab.devtrack.controller;
 
+import cn.auroralab.devtrack.annotation.SkipTokenVerification;
 import cn.auroralab.devtrack.dto.ProjectDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
@@ -80,6 +81,7 @@ public class ProjectController {
     }
 
     @GetMapping("/get")
+    @SkipTokenVerification
     public ResponseVO<ProjectDTO> get(String projectUUID) {
         StatusCode statusCode = StatusCode.SUCCESS;
         ProjectDTO projectDTO = null;
