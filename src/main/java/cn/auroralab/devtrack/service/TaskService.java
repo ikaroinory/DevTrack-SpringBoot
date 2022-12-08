@@ -142,4 +142,16 @@ public interface TaskService {
      */
     void updateSourceOfDemand(String requesterUUID, String taskUUID, SourceOfDemand sourceOfDemand)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务描述。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param description   新任务描述。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void updateDescription(String requesterUUID, String taskUUID, String description)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 }

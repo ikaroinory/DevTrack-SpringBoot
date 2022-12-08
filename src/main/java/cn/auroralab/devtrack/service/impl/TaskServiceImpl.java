@@ -200,4 +200,18 @@ public class TaskServiceImpl implements TaskService {
 
         taskDAO.updateById(task);
     }
+
+    public void updateDescription(String requesterUUID, String taskUUID, String description)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(description);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setDescription(description);
+
+        taskDAO.updateById(task);
+    }
 }

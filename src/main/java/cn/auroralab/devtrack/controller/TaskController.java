@@ -188,4 +188,19 @@ public class TaskController {
 
         return statusCode;
     }
+
+    @PostMapping("/updateDescription")
+    public StatusCode updateDescription(@RequestHeader(value = "Authorization") String authorization, String taskUUID, String description) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateDescription(requesterUUID, taskUUID, description);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
 }
