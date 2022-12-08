@@ -15,6 +15,7 @@ import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
+import cn.auroralab.devtrack.vo.TaskStatisticsVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -247,5 +248,19 @@ public class TaskController {
         }
 
         return statusCode;
+    }
+
+    @GetMapping("/getTaskStatistics")
+    public ResponseVO<TaskStatisticsVO> getTaskStatistics(String projectUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        TaskStatisticsVO taskStatisticsVO = null;
+
+        try {
+            taskStatisticsVO = taskService.getTaskStatistics(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, taskStatisticsVO);
     }
 }

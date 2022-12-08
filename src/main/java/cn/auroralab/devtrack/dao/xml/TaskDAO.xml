@@ -17,4 +17,39 @@
         group by date
         order by date;
     </select>
+    <select id="getTaskStatistics" resultType="cn.auroralab.devtrack.dto.TaskStatisticsDTO">
+        select creationList.date,
+               ifnull(creationList.count, 0) as creation,
+               ifnull(finishList.count, 0)   as completion
+        from (select date_format(creation_time, '%Y-%m%-%d') as date, count(*) as count
+              from tasks
+              where from_project = #{projectUUID}
+                and is_deleted = false
+              group by date
+              order by date) creationList
+                 left join (select date_format(finish_time, '%Y-%m%-%d') as date, count(*) as count
+                            from tasks
+                            where from_project = #{projectUUID}
+                              and is_deleted = false
+                              and finish_time is not null
+                            group by date
+                            order by date) finishList on creationList.date = finishList.date
+        union
+        select completionList.date,
+               ifnull(createList.count, 0)     as creation,
+               ifnull(completionList.count, 0) as completion
+        from (select date_format(creation_time, '%Y-%m%-%d') as date, count(*) as count
+              from tasks
+              where from_project = #{projectUUID}
+                and is_deleted = false
+              group by date
+              order by date) createList
+                 right join (select date_format(finish_time, '%Y-%m%-%d') as date, count(*) as count
+                             from tasks
+                             where from_project = #{projectUUID}
+                               and is_deleted = false
+                               and finish_time is not null
+                             group by date
+                             order by date) completionList on createList.date = completionList.date
+    </select>
 </mapper>
