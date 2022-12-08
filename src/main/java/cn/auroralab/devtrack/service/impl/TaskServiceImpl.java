@@ -134,6 +134,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateStartTime(String requesterUUID, String taskUUID, LocalDateTime startTime)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(startTime);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
@@ -147,6 +148,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateDeadline(String requesterUUID, String taskUUID, LocalDateTime deadline)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(deadline);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
@@ -160,6 +162,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateTaskType(String requesterUUID, String taskUUID, TaskType taskType)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(taskType);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
@@ -173,6 +176,7 @@ public class TaskServiceImpl implements TaskService {
     public void updatePriority(String requesterUUID, String taskUUID, Priority priority)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(priority);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
@@ -186,6 +190,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateSourceOfDemand(String requesterUUID, String taskUUID, SourceOfDemand sourceOfDemand)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
+        Validator.notNull(sourceOfDemand);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
