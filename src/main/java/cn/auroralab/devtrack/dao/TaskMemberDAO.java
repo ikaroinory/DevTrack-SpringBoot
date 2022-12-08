@@ -1,12 +1,14 @@
 package cn.auroralab.devtrack.dao;
 
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.po.TaskMember;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface TaskMemberDAO {
+public interface TaskMemberDAO extends BaseMapper<TaskMember> {
     /**
      * 插入一系列用户-任务映射记录。
      *
