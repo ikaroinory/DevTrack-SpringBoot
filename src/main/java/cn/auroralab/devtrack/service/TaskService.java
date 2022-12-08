@@ -166,4 +166,26 @@ public interface TaskService {
      */
     void updateMembers(String requesterUUID, String taskUUID, List<String> memberUUIDList)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 完成任务。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void finish(String requesterUUID, String taskUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 删除任务。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void delete(String requesterUUID, String taskUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 }

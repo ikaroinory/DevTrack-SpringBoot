@@ -218,4 +218,34 @@ public class TaskController {
 
         return statusCode;
     }
+
+    @PostMapping("/finish")
+    public StatusCode finish(@RequestHeader(value = "Authorization") String authorization, String taskUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.finish(requesterUUID, taskUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/delete")
+    public StatusCode delete(@RequestHeader(value = "Authorization") String authorization, String taskUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.delete(requesterUUID, taskUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
 }

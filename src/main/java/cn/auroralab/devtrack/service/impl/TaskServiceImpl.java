@@ -231,4 +231,34 @@ public class TaskServiceImpl implements TaskService {
         if (!memberUUIDList.isEmpty())
             taskMemberDAO.newRecords(taskUUID, memberUUIDList);
     }
+
+    public void finish(String requesterUUID, String taskUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setFinishTime(LocalDateTime.now());
+
+        taskDAO.updateById(task);
+    }
+
+    public void delete(String requesterUUID, String taskUUID)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        QueryWrapper<TaskMember> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(TaskMember.TASK_UUID, taskUUID);
+        taskMemberDAO.delete(queryWrapper);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setDeleted(true);
+
+        taskDAO.updateById(task);
+    }
 }
