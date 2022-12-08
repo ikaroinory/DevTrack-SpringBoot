@@ -15,8 +15,10 @@ import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.po.Task;
+import cn.auroralab.devtrack.po.TaskMember;
 import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -76,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.insert(task);
 
         if (!form.getMembers().isEmpty())
-            taskMemberDAO.newRecords(form.getMembers(), task.getUuid());
+            taskMemberDAO.newRecords(task.getUuid(), form.getMembers());
     }
 
     public PageInformation<TaskDTO> getTaskList(String projectUUID, int pageNum, int pageSize)
@@ -218,15 +220,15 @@ public class TaskServiceImpl implements TaskService {
     public void updateMembers(String requesterUUID, String taskUUID, List<String> memberUUIDList)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
         Validator.notEmpty(requesterUUID, taskUUID);
-        Validator.notEmpty(memberUUIDList);
 
         updateTaskValidator(requesterUUID, taskUUID);
 
-        taskMemberDAO.
+        QueryWrapper<TaskMember> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(TaskMember.TASK_UUID, taskUUID);
 
-        Task task = new Task();
-        task.setUuid(taskUUID);
+        taskMemberDAO.delete(queryWrapper);
 
-        taskDAO.updateById(task);
+        if (!memberUUIDList.isEmpty())
+            taskMemberDAO.newRecords(taskUUID, memberUUIDList);
     }
 }

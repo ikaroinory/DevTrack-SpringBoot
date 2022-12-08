@@ -203,4 +203,19 @@ public class TaskController {
 
         return statusCode;
     }
+
+    @PostMapping("/updateMembers")
+    public StatusCode updateMembers(@RequestHeader(value = "Authorization") String authorization, String taskUUID, @RequestParam List<String> memberUUIDList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateMembers(requesterUUID, taskUUID, memberUUIDList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
 }
