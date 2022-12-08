@@ -56,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
         return JwtUtils.generate(account.getUuid(), account.getUsername());
     }
 
-    public void autoSignIn(String userUUID)
+    public byte[] autoSignIn(String userUUID)
             throws RequiredParametersIsEmptyException, UserNotFoundException {
         Validator.notEmpty(userUUID);
 
@@ -68,6 +68,8 @@ public class AccountServiceImpl implements AccountService {
             throw new UserNotFoundException();
 
         accountDAO.updateLastSignInTime(userUUID);
+
+        return account.getAvatar();
     }
 
     public void signUp(String username, String password, String email, String vCode)

@@ -39,18 +39,19 @@ public class AccountController {
     }
 
     @PostMapping("/autoSignIn")
-    public StatusCode autoSignIn(@RequestHeader(value = "Authorization") String authorization) {
+    public ResponseVO<byte[]> autoSignIn(@RequestHeader(value = "Authorization") String authorization) {
         String userUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
+        byte[] avatar = null;
 
         try {
-            accountService.autoSignIn(userUUID);
+            avatar = accountService.autoSignIn(userUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
 
-        return statusCode;
+        return new ResponseVO<>(statusCode, avatar);
     }
 
     @PostMapping("/signUp")
@@ -79,7 +80,6 @@ public class AccountController {
 
         return statusCode;
     }
-
 
     @GetMapping("/getAvatar")
     @SkipTokenVerification
