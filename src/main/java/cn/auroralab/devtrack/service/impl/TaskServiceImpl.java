@@ -156,4 +156,43 @@ public class TaskServiceImpl implements TaskService {
 
         taskDAO.updateById(task);
     }
+
+    public void updateTaskType(String requesterUUID, String taskUUID, TaskType taskType)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setType(taskType);
+
+        taskDAO.updateById(task);
+    }
+
+    public void updatePriority(String requesterUUID, String taskUUID, Priority priority)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setPriority(priority);
+
+        taskDAO.updateById(task);
+    }
+
+    public void updateSourceOfDemand(String requesterUUID, String taskUUID, SourceOfDemand sourceOfDemand)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException {
+        Validator.notEmpty(requesterUUID, taskUUID);
+
+        updateTaskValidator(requesterUUID, taskUUID);
+
+        Task task = new Task();
+        task.setUuid(taskUUID);
+        task.setSourceOfDemand(sourceOfDemand);
+
+        taskDAO.updateById(task);
+    }
 }

@@ -3,6 +3,9 @@ package cn.auroralab.devtrack.service;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.enumeration.Priority;
+import cn.auroralab.devtrack.enumeration.SourceOfDemand;
+import cn.auroralab.devtrack.enumeration.TaskType;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
@@ -102,5 +105,41 @@ public interface TaskService {
      * @since 2022-12-07
      */
     void updateDeadline(String requesterUUID, String taskUUID, LocalDateTime deadline)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务类型。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param taskType      新任务类型。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void updateTaskType(String requesterUUID, String taskUUID, TaskType taskType)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务优先级。
+     *
+     * @param requesterUUID 请求人UUID。
+     * @param taskUUID      任务UUID。
+     * @param priority      新任务优先级。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void updatePriority(String requesterUUID, String taskUUID, Priority priority)
+            throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 修改任务需求来源。
+     *
+     * @param requesterUUID  请求人UUID。
+     * @param taskUUID       任务UUID。
+     * @param sourceOfDemand 新任务需求来源。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    void updateSourceOfDemand(String requesterUUID, String taskUUID, SourceOfDemand sourceOfDemand)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
 }

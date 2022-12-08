@@ -4,7 +4,10 @@ import cn.auroralab.devtrack.annotation.SkipTokenVerification;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.enumeration.Priority;
+import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.StatusCode;
+import cn.auroralab.devtrack.enumeration.TaskType;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.form.UpdateTaskTimeForm;
@@ -134,6 +137,51 @@ public class TaskController {
 
         try {
             taskService.updateDeadline(requesterUUID, form.getTaskUUID(), form.getTime());
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updateType")
+    public StatusCode updateType(@RequestHeader(value = "Authorization") String authorization, String taskUUID, TaskType taskType) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateTaskType(requesterUUID, taskUUID, taskType);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updatePriority")
+    public StatusCode updatePriority(@RequestHeader(value = "Authorization") String authorization, String taskUUID, Priority priority) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updatePriority(requesterUUID, taskUUID, priority);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/updateSourceOfDemand")
+    public StatusCode updateSourceOfDemand(@RequestHeader(value = "Authorization") String authorization, String taskUUID, SourceOfDemand sourceOfDemand) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            taskService.updateSourceOfDemand(requesterUUID, taskUUID, sourceOfDemand);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
