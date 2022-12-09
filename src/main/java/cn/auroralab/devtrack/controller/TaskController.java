@@ -1,10 +1,7 @@
 package cn.auroralab.devtrack.controller;
 
 import cn.auroralab.devtrack.annotation.SkipTokenVerification;
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
-import cn.auroralab.devtrack.dto.TaskOverviewDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.StatusCode;
@@ -266,16 +263,30 @@ public class TaskController {
     }
 
     @GetMapping("/getTaskOverview")
-    public ResponseVO<TaskOverviewDTO> getTaskOverview(String projectUUID){
+    public ResponseVO<TaskOverviewDTO> getTaskOverview(String projectUUID) {
         StatusCode statusCode = StatusCode.SUCCESS;
-        TaskOverviewDTO taskStatisticsVO = null;
+        TaskOverviewDTO taskOverviewDTO = null;
 
         try {
-            taskStatisticsVO = taskService.getTaskOverview(projectUUID);
+            taskOverviewDTO = taskService.getTaskOverview(projectUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
 
-        return new ResponseVO<>(statusCode, taskStatisticsVO);
+        return new ResponseVO<>(statusCode, taskOverviewDTO);
+    }
+
+    @GetMapping("/getPlannedCompletion")
+    public ResponseVO<PlannedCompletionDTO> getPlannedCompletion(String projectUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        PlannedCompletionDTO plannedCompletionDTO = null;
+
+        try {
+            plannedCompletionDTO = taskService.getPlannedCompletion(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, plannedCompletionDTO);
     }
 }

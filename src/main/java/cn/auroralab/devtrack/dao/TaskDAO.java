@@ -1,9 +1,6 @@
 package cn.auroralab.devtrack.dao;
 
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskOverviewDTO;
-import cn.auroralab.devtrack.dto.TaskStatisticsDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.po.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -74,4 +71,15 @@ public interface TaskDAO extends BaseMapper<Task> {
      */
     @Update("update tasks set finish_time = now() where task_uuid = #{taskUUID}")
     int setTaskFinished(String taskUUID);
+
+    /**
+     * 获取项目的计划内任务完成统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    @Select("{call get_planned_completion(#{projectUUID, mode=IN, jdbcType=VARCHAR})}")
+    @Options(statementType = StatementType.CALLABLE)
+    PlannedCompletionDTO getPlannedCompletion(String projectUUID);
 }

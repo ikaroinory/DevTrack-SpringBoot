@@ -305,4 +305,11 @@ public class TaskServiceImpl implements TaskService {
 
         return taskDAO.getTaskOverview(projectUUID);
     }
+
+    public PlannedCompletionDTO getPlannedCompletion(String projectUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(projectUUID);
+
+        return taskDAO.getPlannedCompletion(projectUUID);
+    }
 }

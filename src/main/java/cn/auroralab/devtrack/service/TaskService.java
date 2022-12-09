@@ -1,9 +1,6 @@
 package cn.auroralab.devtrack.service;
 
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
-import cn.auroralab.devtrack.dto.TaskOverviewDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
@@ -211,5 +208,15 @@ public interface TaskService {
      * @since 2022-12-09
      */
     TaskOverviewDTO getTaskOverview(String projectUUID)
+            throws RequiredParametersIsEmptyException;
+
+    /**
+     * 获取项目的计划内任务完成统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    PlannedCompletionDTO getPlannedCompletion(String projectUUID)
             throws RequiredParametersIsEmptyException;
 }
