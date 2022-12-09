@@ -51,5 +51,6 @@
                                and finish_time is not null
                              group by date
                              order by date) completionList on createList.date = completionList.date
+        order by date
     </select>
 </mapper>
