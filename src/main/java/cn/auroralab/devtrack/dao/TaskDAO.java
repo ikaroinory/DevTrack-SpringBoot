@@ -29,7 +29,7 @@ public interface TaskDAO extends BaseMapper<Task> {
      * @author Guanyu Hu
      * @since 2022-11-09
      */
-    List<HeatMapData> getTaskCountFinishedInThePastYear(String userUUID);
+    List<HeatMapDataDTO> getTaskCountFinishedInThePastYear(String userUUID);
 
     /**
      * 获取项目的每日任务统计。

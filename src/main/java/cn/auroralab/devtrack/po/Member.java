@@ -19,7 +19,6 @@ public class Member implements Serializable {
     public static final String UUID = "record_uuid";
     public static final String PROJECT_UUID = "from_project";
     public static final String USER_UUID = "user_uuid";
-    public static final String NICKNAME = "nick_name";
     public static final String ROLE = "role";
     public static final String TIME = "record_time";
 

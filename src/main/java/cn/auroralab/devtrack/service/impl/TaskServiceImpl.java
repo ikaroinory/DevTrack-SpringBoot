@@ -26,8 +26,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -105,11 +107,30 @@ public class TaskServiceImpl implements TaskService {
         return taskMemberDAO.getTaskMemberList(taskUUID);
     }
 
-    public List<HeatMapData> getTaskCountFinishedInThePastYear(String userUUID)
+    public List<HeatMapDataDTO> getTaskCountFinishedInThePastYear(String userUUID)
             throws RequiredParametersIsEmptyException {
         Validator.notEmpty(userUUID);
 
-        return taskDAO.getTaskCountFinishedInThePastYear(userUUID);
+        List<HeatMapDataDTO> list = taskDAO.getTaskCountFinishedInThePastYear(userUUID);
+        List<HeatMapDataDTO> newList = new ArrayList<>();
+
+        int curPointer = 0;
+        int count = list.size();
+        LocalDate now = LocalDate.now();
+        LocalDate date = now.minusYears(1);
+        while (date.getDayOfWeek() != DayOfWeek.SUNDAY)
+            date = date.minusDays(1);
+
+        for (; now.isAfter(date) || now.isEqual(date); date = date.plusDays(1)) {
+            if (curPointer < count && list.get(curPointer).getDate().isEqual(date)) {
+                newList.add(list.get(curPointer));
+                curPointer++;
+            } else {
+                newList.add(new HeatMapDataDTO(date, null));
+            }
+        }
+
+        return newList;
     }
 
     public void updateTitle(String requesterUUID, String taskUUID, String title)

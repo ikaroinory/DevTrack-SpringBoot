@@ -56,7 +56,7 @@ public interface TaskService {
      * @author Guanyu Hu
      * @since 2022-11-08
      */
-    List<HeatMapData> getTaskCountFinishedInThePastYear(String userUUID)
+    List<HeatMapDataDTO> getTaskCountFinishedInThePastYear(String userUUID)
             throws RequiredParametersIsEmptyException;
 
     /**

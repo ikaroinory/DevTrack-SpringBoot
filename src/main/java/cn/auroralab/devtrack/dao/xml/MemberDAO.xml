@@ -34,7 +34,6 @@
                username,
                nickname,
                avatar,
-               nicknameInProject,
                roleUUID,
                roleName,
                joinTime

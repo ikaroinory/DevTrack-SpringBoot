@@ -7,7 +7,7 @@
         where fromProjectUUID = #{projectUUID}
         order by creationTime
     </select>
-    <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapData">
+    <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapDataDTO">
         select date_format(finish_time, '%Y-%m-%d') as date, count(*) as count
         from tasks,
              task_members

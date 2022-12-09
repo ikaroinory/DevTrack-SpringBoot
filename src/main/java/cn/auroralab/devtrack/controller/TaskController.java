@@ -70,9 +70,9 @@ public class TaskController {
 
     @GetMapping("/getHeatMap")
     @SkipTokenVerification
-    public ResponseVO<List<HeatMapData>> getHeatMap(String userUUID) {
+    public ResponseVO<List<HeatMapDataDTO>> getHeatMap(String userUUID) {
         StatusCode statusCode = StatusCode.SUCCESS;
-        List<HeatMapData> list = null;
+        List<HeatMapDataDTO> list = null;
 
         try {
             list = taskService.getTaskCountFinishedInThePastYear(userUUID);
