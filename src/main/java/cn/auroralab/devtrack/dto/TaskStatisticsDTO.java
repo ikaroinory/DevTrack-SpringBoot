@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class TaskStatisticsDTO {
     public String date;
-    public int creation;
-    public int completion;
+    public Integer creation;
+    public Integer completion;
 }

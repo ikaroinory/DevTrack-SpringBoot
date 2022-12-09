@@ -298,16 +298,10 @@ public class TaskServiceImpl implements TaskService {
                 curPointer++;
             } else {
                 statisticsVO.getDateList().add(date.toString());
-                statisticsVO.getCreationList().add(0);
-                statisticsVO.getCompletionList().add(0);
+                statisticsVO.getCreationList().add(null);
+                statisticsVO.getCompletionList().add(null);
             }
         }
-
-//        list.forEach(taskStatisticsDTO -> {
-//            statisticsVO.getDateList().add(taskStatisticsDTO.date);
-//            statisticsVO.getCreationList().add(taskStatisticsDTO.creation);
-//            statisticsVO.getCompletionList().add(taskStatisticsDTO.completion);
-//        });
 
         return statisticsVO;
     }
