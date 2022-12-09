@@ -243,14 +243,10 @@ public class TaskServiceImpl implements TaskService {
 
         updateTaskValidator(requesterUUID, taskUUID);
 
-        Task task = new Task();
-        task.setUuid(taskUUID);
         if (finished)
-            task.setFinishTime(LocalDateTime.now());
+            taskDAO.setTaskFinished(taskUUID);
         else
-            task.setFinishTime(null);
-
-        taskDAO.updateById(task);
+            taskDAO.setTaskUnfinished(taskUUID);
     }
 
     public void delete(String requesterUUID, String taskUUID)

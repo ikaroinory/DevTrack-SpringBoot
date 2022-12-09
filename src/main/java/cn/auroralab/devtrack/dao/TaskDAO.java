@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 
 import java.util.List;
@@ -52,4 +53,25 @@ public interface TaskDAO extends BaseMapper<Task> {
     @Select("{call get_task_overview(#{projectUUID, mode=IN, jdbcType=VARCHAR})}")
     @Options(statementType = StatementType.CALLABLE)
     TaskOverviewDTO getTaskOverview(String projectUUID);
+
+    /**
+     * 更新任务完成时间。
+     *
+     * @param taskUUID 任务UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    @Update("update tasks set finish_time = null where task_uuid = #{taskUUID}")
+    int setTaskUnfinished(String taskUUID);
+
+    /**
+     * 更新任务完成时间。
+     *
+     * @param taskUUID   任务UUID。
+     * @param finishTime 任务完成时间。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    @Update("update tasks set finish_time = now() where task_uuid = #{taskUUID}")
+    int setTaskFinished(String taskUUID);
 }
