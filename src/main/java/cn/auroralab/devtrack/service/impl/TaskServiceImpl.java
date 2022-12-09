@@ -1,29 +1,32 @@
 package cn.auroralab.devtrack.service.impl;
 
+import cn.auroralab.devtrack.dao.ProjectDAO;
 import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dao.TaskDAO;
 import cn.auroralab.devtrack.dao.TaskMemberDAO;
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
+import cn.auroralab.devtrack.exception.project.ProjectNotFoundException;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
+import cn.auroralab.devtrack.po.Project;
 import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.po.Task;
 import cn.auroralab.devtrack.po.TaskMember;
 import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.*;
+import cn.auroralab.devtrack.vo.TaskStatisticsVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,11 +35,13 @@ public class TaskServiceImpl implements TaskService {
     private final TaskDAO taskDAO;
     private final TaskMemberDAO taskMemberDAO;
     private final RoleDAO roleDAO;
+    private final ProjectDAO projectDAO;
 
-    public TaskServiceImpl(TaskDAO taskDAO, TaskMemberDAO taskMemberDAO, RoleDAO roleDAO) {
+    public TaskServiceImpl(TaskDAO taskDAO, TaskMemberDAO taskMemberDAO, RoleDAO roleDAO, ProjectDAO projectDAO) {
         this.taskDAO = taskDAO;
         this.taskMemberDAO = taskMemberDAO;
         this.roleDAO = roleDAO;
+        this.projectDAO = projectDAO;
     }
 
     private void updateTaskValidator(String userUUID, String taskUUID)
@@ -238,14 +243,10 @@ public class TaskServiceImpl implements TaskService {
 
         updateTaskValidator(requesterUUID, taskUUID);
 
-        Task task = new Task();
-        task.setUuid(taskUUID);
         if (finished)
-            task.setFinishTime(LocalDateTime.now());
+            taskDAO.setTaskFinished(taskUUID);
         else
-            task.setFinishTime(null);
-
-        taskDAO.updateById(task);
+            taskDAO.setTaskUnfinished(taskUUID);
     }
 
     public void delete(String requesterUUID, String taskUUID)
@@ -264,5 +265,51 @@ public class TaskServiceImpl implements TaskService {
         task.setDeleteTime(LocalDateTime.now());
 
         taskDAO.updateById(task);
+    }
+
+    public TaskStatisticsVO getTaskStatistics(String projectUUID)
+            throws RequiredParametersIsEmptyException, ProjectNotFoundException {
+        Validator.notEmpty(projectUUID);
+
+        List<TaskStatisticsDTO> list = taskDAO.getTaskStatistics(projectUUID);
+
+        Project project = projectDAO.selectById(projectUUID);
+
+        if (project == null)
+            throw new ProjectNotFoundException();
+
+        TaskStatisticsVO statisticsVO = new TaskStatisticsVO();
+
+        LocalDate now = LocalDate.now();
+        int count = list.size();
+        int curPointer = 0;
+        for (LocalDate date = project.getCreationTime().toLocalDate(); now.isAfter(date) || now.isEqual(date); date = date.plusDays(1)) {
+            if (curPointer < count && LocalDate.parse(list.get(curPointer).getDate()).isEqual(date)) {
+                statisticsVO.getDateList().add(list.get(curPointer).getDate());
+                statisticsVO.getCreationList().add(list.get(curPointer).creation);
+                statisticsVO.getCompletionList().add(list.get(curPointer).completion);
+                curPointer++;
+            } else {
+                statisticsVO.getDateList().add(date.toString());
+                statisticsVO.getCreationList().add(null);
+                statisticsVO.getCompletionList().add(null);
+            }
+        }
+
+        return statisticsVO;
+    }
+
+    public TaskOverviewDTO getTaskOverview(String projectUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(projectUUID);
+
+        return taskDAO.getTaskOverview(projectUUID);
+    }
+
+    public PlannedCompletionDTO getPlannedCompletion(String projectUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(projectUUID);
+
+        return taskDAO.getPlannedCompletion(projectUUID);
     }
 }

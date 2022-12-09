@@ -1,9 +1,7 @@
 package cn.auroralab.devtrack.controller;
 
 import cn.auroralab.devtrack.annotation.SkipTokenVerification;
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.StatusCode;
@@ -15,6 +13,7 @@ import cn.auroralab.devtrack.service.TaskService;
 import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
+import cn.auroralab.devtrack.vo.TaskStatisticsVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -247,5 +246,47 @@ public class TaskController {
         }
 
         return statusCode;
+    }
+
+    @GetMapping("/getTaskStatistics")
+    public ResponseVO<TaskStatisticsVO> getTaskStatistics(String projectUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        TaskStatisticsVO taskStatisticsVO = null;
+
+        try {
+            taskStatisticsVO = taskService.getTaskStatistics(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, taskStatisticsVO);
+    }
+
+    @GetMapping("/getTaskOverview")
+    public ResponseVO<TaskOverviewDTO> getTaskOverview(String projectUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        TaskOverviewDTO taskOverviewDTO = null;
+
+        try {
+            taskOverviewDTO = taskService.getTaskOverview(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, taskOverviewDTO);
+    }
+
+    @GetMapping("/getPlannedCompletion")
+    public ResponseVO<PlannedCompletionDTO> getPlannedCompletion(String projectUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+        PlannedCompletionDTO plannedCompletionDTO = null;
+
+        try {
+            plannedCompletionDTO = taskService.getPlannedCompletion(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, plannedCompletionDTO);
     }
 }

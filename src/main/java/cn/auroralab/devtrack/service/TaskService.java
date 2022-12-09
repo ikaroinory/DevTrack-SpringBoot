@@ -1,16 +1,16 @@
 package cn.auroralab.devtrack.service;
 
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
+import cn.auroralab.devtrack.exception.project.ProjectNotFoundException;
 import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.exception.task.TaskNotFoundException;
 import cn.auroralab.devtrack.form.NewTaskForm;
 import cn.auroralab.devtrack.util.PageInformation;
+import cn.auroralab.devtrack.vo.TaskStatisticsVO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -189,4 +189,34 @@ public interface TaskService {
      */
     void delete(String requesterUUID, String taskUUID)
             throws RequiredParametersIsEmptyException, TaskNotFoundException, PermissionDeniedException;
+
+    /**
+     * 获取项目的每日任务统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    TaskStatisticsVO getTaskStatistics(String projectUUID)
+            throws RequiredParametersIsEmptyException, ProjectNotFoundException;
+
+    /**
+     * 获取项目的任务概览统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    TaskOverviewDTO getTaskOverview(String projectUUID)
+            throws RequiredParametersIsEmptyException;
+
+    /**
+     * 获取项目的计划内任务完成统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    PlannedCompletionDTO getPlannedCompletion(String projectUUID)
+            throws RequiredParametersIsEmptyException;
 }
