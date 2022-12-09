@@ -3,6 +3,7 @@ package cn.auroralab.devtrack.service;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.dto.TaskOverviewDTO;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
@@ -201,4 +202,14 @@ public interface TaskService {
      */
     TaskStatisticsVO getTaskStatistics(String projectUUID)
             throws RequiredParametersIsEmptyException, ProjectNotFoundException;
+
+    /**
+     * 获取项目的任务概览统计。
+     *
+     * @param projectUUID 项目UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-09
+     */
+    TaskOverviewDTO getTaskOverview(String projectUUID)
+            throws RequiredParametersIsEmptyException;
 }

@@ -4,6 +4,7 @@ import cn.auroralab.devtrack.annotation.SkipTokenVerification;
 import cn.auroralab.devtrack.dto.HeatMapData;
 import cn.auroralab.devtrack.dto.TaskDTO;
 import cn.auroralab.devtrack.dto.TaskMemberDTO;
+import cn.auroralab.devtrack.dto.TaskOverviewDTO;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.StatusCode;
@@ -257,6 +258,20 @@ public class TaskController {
 
         try {
             taskStatisticsVO = taskService.getTaskStatistics(projectUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, taskStatisticsVO);
+    }
+
+    @GetMapping("/getTaskOverview")
+    public ResponseVO<TaskOverviewDTO> getTaskOverview(String projectUUID){
+        StatusCode statusCode = StatusCode.SUCCESS;
+        TaskOverviewDTO taskStatisticsVO = null;
+
+        try {
+            taskStatisticsVO = taskService.getTaskOverview(projectUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }

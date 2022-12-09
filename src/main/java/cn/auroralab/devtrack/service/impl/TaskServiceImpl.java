@@ -4,10 +4,7 @@ import cn.auroralab.devtrack.dao.ProjectDAO;
 import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dao.TaskDAO;
 import cn.auroralab.devtrack.dao.TaskMemberDAO;
-import cn.auroralab.devtrack.dto.HeatMapData;
-import cn.auroralab.devtrack.dto.TaskDTO;
-import cn.auroralab.devtrack.dto.TaskMemberDTO;
-import cn.auroralab.devtrack.dto.TaskStatisticsDTO;
+import cn.auroralab.devtrack.dto.*;
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
 import cn.auroralab.devtrack.enumeration.TaskType;
@@ -304,5 +301,12 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return statisticsVO;
+    }
+
+    public TaskOverviewDTO getTaskOverview(String projectUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(projectUUID);
+
+        return taskDAO.getTaskOverview(projectUUID);
     }
 }
