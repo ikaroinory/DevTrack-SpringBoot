@@ -19,6 +19,17 @@ spring:
     jackson:
         serialization:
             write-enums-using-to-string: true
+    application:
+        name: kafka
+    kafka:
+        bootstrap-servers: localhost:9092
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+        consumer:
+            key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+            value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+            group-id: test-consumer-group
 mybatis-plus:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
