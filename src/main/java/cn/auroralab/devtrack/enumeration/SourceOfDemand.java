@@ -25,6 +25,10 @@ public enum SourceOfDemand implements Parseable {
      * 测试岗。
      */
     TEST_POST(2),
+    /**
+     * 设计岗。
+     */
+    DESIGN_POST(3),
     ;
 
     @EnumValue
