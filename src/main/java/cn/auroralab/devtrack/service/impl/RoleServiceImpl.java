@@ -87,17 +87,16 @@ public class RoleServiceImpl implements RoleService {
         if (roleOfUser == null || !roleOfUser.getUpdateRole())
             throw new PermissionDeniedException();
 
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(Role.UUID, role.getUuid());
-
         Role newRole = new Role();
+        newRole.setUuid(role.getUuid());
+        newRole.setName(role.getName());
         newRole.setProject(null);
         newRole.setInviteMember(role.getInviteMember());
         newRole.setCreateTask(role.getCreateTask());
         newRole.setUpdateTask(role.getUpdateTask());
         newRole.setDeleteTask(role.getDeleteTask());
 
-        roleDAO.update(newRole, queryWrapper);
+        roleDAO.updateById(newRole);
     }
 
     public void removeRole(String requesterUUID, String roleUUID)

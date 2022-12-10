@@ -110,5 +110,6 @@ public class Role implements Serializable {
         uuid = recordUUID;
         project = projectUUID;
         name = roleName;
+        inviteMember = true;
     }
 }
