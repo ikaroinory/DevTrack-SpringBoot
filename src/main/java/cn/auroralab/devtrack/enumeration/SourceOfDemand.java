@@ -29,6 +29,10 @@ public enum SourceOfDemand implements Parseable {
      * 设计岗。
      */
     DESIGN_POST(3),
+    /**
+     * 市场调研。
+     */
+    MARKET_RESEARCH(4),
     ;
 
     @EnumValue
