@@ -25,6 +25,14 @@ public enum TaskType implements Parseable {
      * 修复缺陷。
      */
     BUGFIX(2),
+    /**
+     * 设计。
+     */
+    DESIGN(3),
+    /**
+     * 文档。
+     */
+    DOCS(4),
     ;
 
     @EnumValue
