@@ -14,4 +14,14 @@ public interface VCodeService {
      */
     VCodeRecord signUp(String email)
             throws RequiredParametersIsEmptyException, UnknownException;
+
+    /**
+     * 生成找回密码验证码。
+     *
+     * @param email 邮箱。
+     * @author Guanyu Hu
+     * @since 2022-12-11
+     */
+    VCodeRecord retrievePassword(String email)
+            throws RequiredParametersIsEmptyException, UnknownException;
 }

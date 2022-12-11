@@ -43,4 +43,31 @@ public class VCodeServiceImpl implements VCodeService {
 
         return newRecord;
     }
+
+    public VCodeRecord retrievePassword(String email)
+            throws RequiredParametersIsEmptyException, UnknownException {
+        Validator.notEmpty(email);
+
+        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(VCodeType.RETRIEVE_PASSWORD, email);
+
+        if (latestRecord != null)
+            return latestRecord;
+
+        VCodeGenerator generator = new VCodeGenerator();
+        VCodeRecord newRecord = new VCodeRecord();
+
+        newRecord.setUuid(BitstreamGenerator.parseUUID());
+        newRecord.setTime(generator.getStartTime());
+        newRecord.setType(VCodeType.RETRIEVE_PASSWORD);
+        newRecord.setEmail(email);
+        newRecord.setVCode(generator.getVCode());
+        newRecord.setValidTime(generator.getValidTime());
+
+        int insert = vCodeDAO.insert(newRecord);
+
+        if (insert == 0)
+            throw new UnknownException();
+
+        return newRecord;
+    }
 }

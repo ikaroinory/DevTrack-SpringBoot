@@ -55,6 +55,19 @@ public interface AccountService {
             throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException;
 
     /**
+     * 找回密码。
+     *
+     * @param username 用户名。
+     * @param password 新密码。
+     * @param email    邮箱。
+     * @param vCode    验证码。
+     * @author Guanyu Hu
+     * @since 2022-12-11
+     */
+    void retrievePassword(String username, String password, String email, String vCode)
+            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException;
+
+    /**
      * 修改用户个人信息。
      *
      * @param username     用户名。

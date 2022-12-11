@@ -104,6 +104,33 @@ public class AccountServiceImpl implements AccountService {
             throw new UnknownException();
     }
 
+    public void retrievePassword(String username, String password, String email, String vCode)
+            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException {
+        Validator.notEmpty(username, password, email, vCode);
+
+        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(VCodeType.RETRIEVE_PASSWORD, email);
+
+        if (latestRecord == null)
+            throw new VCodeRecordNotFoundException();
+        if (!latestRecord.getVCode().equals(vCode))
+            throw new VCodeErrorException();
+        if (!VCodeGenerator.isValid(latestRecord.getTime(), latestRecord.getValidTime()))
+            throw new VCodeExpiredException();
+
+        QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(Account.USERNAME, username);
+        if (accountDAO.selectOne(queryWrapper) != null)
+            throw new UserExistedException();
+
+        Account account = new Account();
+        account.setPasswordDigest(BitstreamGenerator.parseMD5(password));
+
+        int update = accountDAO.update(account, queryWrapper);
+
+        if (update == 0)
+            throw new UnknownException();
+    }
+
     public void updateProfile(String username, String nickname, Gender gender, String phone, String location, String website, String introduction)
             throws RequiredParametersIsEmptyException, UserNotFoundException {
         Validator.notEmpty(username);
