@@ -39,7 +39,7 @@ public class EmailController {
         String invalidTimeString = invalidTime.toString().split("\\.")[0].replace("T", " ");
 
         String subject = "AuroraLab Verification Code";
-        String text = ResourceFileLoader.readFile("EmailTemplates/VCodeEmailTemplate.html")
+        String text = ResourceFileLoader.readFile("EmailTemplates/SignUp.html")
                 .replace("{{$vcode}}", record.getVCode())
                 .replace("{{$validTime}}", String.valueOf(record.getValidTime()))
                 .replace("{{$time}}", invalidTimeString)
