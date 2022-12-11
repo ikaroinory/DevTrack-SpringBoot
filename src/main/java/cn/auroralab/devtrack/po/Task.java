@@ -2,7 +2,6 @@ package cn.auroralab.devtrack.po;
 
 import cn.auroralab.devtrack.enumeration.Priority;
 import cn.auroralab.devtrack.enumeration.SourceOfDemand;
-import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.enumeration.TaskType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

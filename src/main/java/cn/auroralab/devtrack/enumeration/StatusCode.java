@@ -18,9 +18,9 @@ public enum StatusCode implements Parseable {
      *
      * 除未知状态外，状态码均使用包含三位数，其中，中间位为具体事务基于低位的扩充位，正常扩充时由小到大，特殊扩充时由大到小。其他两位见下表。
      *
-     * | High |0        | 1      | 2         | 3      | 4     | 5        | 6     | 7       | 8     |
-     * |------|---------|--------|-----------|--------|-------|----------|-------|---------|-------|
-     * | Task | Unknown | Global | Token     | V-Code | Users | Projects | Roles | Members | Tasks |
+     * | High |0        | 1      | 2         | 3      | 4     | 5        | 6     | 7       | 8     | 9            |
+     * |------|---------|--------|-----------|--------|-------|----------|-------|---------|-------|--------------|
+     * | Task | Unknown | Global | Token     | V-Code | Users | Projects | Roles | Members | Tasks | Notification |
      *
      * | Low  | 0       | 1      | 2         | 3      | 4     | 5        |
      * |------|---------|--------|-----------|--------|-------|----------|
@@ -131,6 +131,11 @@ public enum StatusCode implements Parseable {
      * 任务不存在。
      */
     TASK_NOT_FOUND(802),
+
+    /**
+     * 通知不存在。
+     */
+    NOTIFICATION_NOT_FOUND(902),
     ;
 
     @EnumValue

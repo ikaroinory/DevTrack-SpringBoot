@@ -25,7 +25,7 @@ public class VCodeRecord implements Serializable {
     public static final String VALID_TIME = "valid_time";
 
     /**
-     * 验证码业务uuid。
+     * 验证码业务UUID。
      */
     @TableId(value = UUID, type = IdType.INPUT)
     private String uuid;

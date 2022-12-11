@@ -64,8 +64,7 @@ public interface TaskDAO extends BaseMapper<Task> {
     /**
      * 更新任务完成时间。
      *
-     * @param taskUUID   任务UUID。
-     * @param finishTime 任务完成时间。
+     * @param taskUUID 任务UUID。
      * @author Guanyu Hu
      * @since 2022-12-09
      */

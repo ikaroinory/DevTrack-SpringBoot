@@ -5,20 +5,24 @@ import cn.auroralab.devtrack.dto.MemberDTO;
 import cn.auroralab.devtrack.enumeration.StatusCode;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.service.MemberService;
+import cn.auroralab.devtrack.service.NotificationService;
 import cn.auroralab.devtrack.util.JwtUtils;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final NotificationService notificationService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, NotificationService notificationService) {
         this.memberService = memberService;
+        this.notificationService = notificationService;
     }
 
     @PostMapping("/add")
@@ -35,6 +39,53 @@ public class MemberController {
         }
 
         return new ResponseVO<>(statusCode, count);
+    }
+
+    @PostMapping("/invite")
+    public StatusCode inviteMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> recipientUUIDList) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            notificationService.newProjectInvitations(requesterUUID, projectUUID, recipientUUIDList);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/accept")
+    public StatusCode acceptInvite(@RequestHeader(value = "Authorization") String authorization, String notificationUUID, String projectUUID) {
+        String requesterUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        List<String> list = new ArrayList<>();
+        list.add(requesterUUID);
+
+        try {
+            memberService.newDefaultRecords(requesterUUID, projectUUID, list);
+            notificationService.read(notificationUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
+    @PostMapping("/ignore")
+    public StatusCode ignoreInvite(String notificationUUID) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            notificationService.read(notificationUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
     }
 
     @PostMapping("/update")
