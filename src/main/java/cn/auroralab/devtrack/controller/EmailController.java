@@ -51,4 +51,31 @@ public class EmailController {
 
         return new ResponseVO<>(StatusCode.SUCCESS, record.getUuid());
     }
+
+    @PostMapping("/forgetVCode")
+    @SkipTokenVerification
+    public ResponseVO<String> sendForgetPasswordVCodeEmail(String email) {
+        VCodeRecord record;
+        try {
+            record = vCodeService.retrievePassword(email);
+        } catch (ResponseException e) {
+            return new ResponseVO<>(e.statusCode, null);
+        }
+
+        LocalDateTime invalidTime = record.getTime().plusMinutes(record.getValidTime());
+        String invalidTimeString = invalidTime.toString().split("\\.")[0].replace("T", " ");
+
+        String subject = "AuroraLab Verification Code";
+        String text = ResourceFileLoader.readFile("EmailTemplates/RetrievePassword.html")
+                .replace("{{$vcode}}", record.getVCode())
+                .replace("{{$validTime}}", String.valueOf(record.getValidTime()))
+                .replace("{{$time}}", invalidTimeString)
+                .replace("{{$email}}", email);
+
+        emailService.setText(text, true);
+        emailService.addImage("logo", "img/logo_long.png");
+        emailService.sendEmail(email, subject);
+
+        return new ResponseVO<>(StatusCode.SUCCESS, record.getUuid());
+    }
 }

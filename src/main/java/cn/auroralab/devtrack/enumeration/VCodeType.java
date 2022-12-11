@@ -38,6 +38,10 @@ public enum VCodeType {
      * 实名认证。
      */
     REAL_NAME(204),
+    /**
+     * 找回密码。
+     */
+    RETRIEVE_PASSWORD(205),
     ;
 
     @EnumValue
