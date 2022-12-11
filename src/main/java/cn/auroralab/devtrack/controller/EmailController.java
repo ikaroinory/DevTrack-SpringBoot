@@ -46,7 +46,7 @@ public class EmailController {
                 .replace("{{$email}}", email);
 
         emailService.setText(text, true);
-        emailService.addImage("logo", "img/DevTrack_Title_NoBackground.png");
+        emailService.addImage("logo", "img/logo_long.png");
         emailService.sendEmail(email, subject);
 
         return new ResponseVO<>(StatusCode.SUCCESS, record.getUuid());
