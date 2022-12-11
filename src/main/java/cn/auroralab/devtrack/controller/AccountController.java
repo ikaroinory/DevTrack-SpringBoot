@@ -68,6 +68,20 @@ public class AccountController {
         return statusCode;
     }
 
+    @PostMapping("/retrieve")
+    @SkipTokenVerification
+    public StatusCode retrievePassword(String username, String password, String email, String vCode) {
+        StatusCode statusCode = StatusCode.SUCCESS;
+
+        try {
+            accountService.retrievePassword(username, password, email, vCode);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return statusCode;
+    }
+
     @PostMapping("/updateProfile")
     public StatusCode updateProfile(String username, String nickname, Gender gender, String phone, String location, String website, String introduction) {
         StatusCode statusCode = StatusCode.SUCCESS;
