@@ -29,7 +29,6 @@ public class Task implements Serializable {
     public static final String PRIORITY = "priority";
     public static final String SOURCE_OF_DEMAND = "source_of_demand";
     public static final String DESCRIPTION = "task_description";
-    public static final String STATUS = "task_status";
     public static final String DELETED = "is_deleted";
     public static final String CREATION_TIME = "creation_time";
     public static final String START_TIME = "start_time";
@@ -82,11 +81,6 @@ public class Task implements Serializable {
      */
     @TableField(value = DESCRIPTION)
     private String description;
-    /**
-     * 任务状态。
-     */
-    @TableField(value = STATUS)
-    private StatusCode taskStatus;
     /**
      * 是否已删除。
      */
