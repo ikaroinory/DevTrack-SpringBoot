@@ -22,7 +22,11 @@ public class Role implements Serializable {
     public static final String UUID = "role_uuid";
     public static final String PROJECT = "from_project";
     public static final String NAME = "role_name";
-    public static final String INVITE = "invite";
+    public static final String INVITE_MEMBER = "invite_member";
+    public static final String UPDATE_MEMBER = "update_member";
+    public static final String REMOVE_MEMBER = "remove_member";
+    public static final String UPDATE_PROJECT = "update_project";
+    public static final String DELETE_PROJECT = "delete_project";
     public static final String CREATE_TASK = "create_task";
     public static final String UPDATE_TASK = "update_task";
     public static final String DELETE_TASK = "delete_task";
@@ -48,8 +52,28 @@ public class Role implements Serializable {
     /**
      * 邀请成员权限。
      */
-    @TableField(value = INVITE)
-    private Boolean inviteMembers;
+    @TableField(value = INVITE_MEMBER)
+    private Boolean inviteMember;
+    /**
+     * 更新成员信息权限。
+     */
+    @TableField(value = UPDATE_MEMBER)
+    private Boolean updateMember;
+    /**
+     * 移除成员权限。
+     */
+    @TableField(value = REMOVE_MEMBER)
+    private Boolean removeMember;
+    /**
+     * 更新项目权限。
+     */
+    @TableField(value = UPDATE_PROJECT)
+    private Boolean updateProject;
+    /**
+     * 删除项目权限。
+     */
+    @TableField(value = DELETE_PROJECT)
+    private Boolean deleteProject;
     /**
      * 创建任务权限。
      */
@@ -80,4 +104,12 @@ public class Role implements Serializable {
      */
     @TableField(value = REMOVE_ROLE)
     private Boolean removeRole;
+
+    public Role(String recordUUID, String projectUUID, String roleName) {
+        this();
+        uuid = recordUUID;
+        project = projectUUID;
+        name = roleName;
+        inviteMember = true;
+    }
 }

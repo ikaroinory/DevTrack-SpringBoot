@@ -1,0 +1,33 @@
+<div>
+    <table class="table-container" style="width: 100%; border-collapse: collapse; padding: 35px 7%">
+        <tr>
+            <td style="font-size: 0">&nbsp;</td>
+            <td style="width: 600px">
+                <div style="font-size: 15px; margin-bottom: 48px">
+                    <img src="cid:logo" style="height: 40px"/>
+
+                    <h2 style="font-size: 22px; color: #409eff">Please verify your email address</h2>
+                    <p>Your verification code is:</p>
+                    <h2 style="font-size: 22px; text-align: center">{{$vcode}}</h2>
+                    <p>To sign up your AuroraLab account, please verify your email.</p>
+                    <p>
+                        <span>The verification code is valid in</span>
+                        <span style="font-weight: bold">{{$validTime}}</span>
+                        <span>minutes and will expire on</span>
+                        <span style="font-weight: bold">{{$time}}</span>.
+                    </p>
+                </div>
+                <hr/>
+                <div style="font-size: 11px; color: #666666">
+                    <p>&copy; 2022 - 2023 AuroraLab</p>
+                    <p>This message was sent to {{$email}} by AuroraLab.</p>
+                    <p style="font-style: italic">
+                        Note: This is an automated notification. Replies to this email address
+                        are not monitored.
+                    </p>
+                </div>
+            </td>
+            <td style="font-size: 0">&nbsp;</td>
+        </tr>
+    </table>
+</div>

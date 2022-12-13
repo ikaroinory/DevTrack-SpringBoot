@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.auroralab</groupId>
     <artifactId>DevTrack-SpringBoot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-GA</version>
     <name>DevTrack-SpringBoot</name>
     <description>DevTrack web service application</description>
     <properties>
@@ -67,6 +67,10 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.4.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
     </dependencies>
 

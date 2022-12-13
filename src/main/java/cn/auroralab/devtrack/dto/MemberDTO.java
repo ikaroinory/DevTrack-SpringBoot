@@ -32,10 +32,6 @@ public class MemberDTO {
      */
     private byte[] avatar;
     /**
-     * 项目中的昵称。
-     */
-    private String nicknameInProject;
-    /**
      * 项目中的角色uuid。
      */
     private String roleUUID;

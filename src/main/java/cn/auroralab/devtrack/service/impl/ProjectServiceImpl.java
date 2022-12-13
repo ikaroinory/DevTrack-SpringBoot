@@ -1,11 +1,14 @@
 package cn.auroralab.devtrack.service.impl;
 
 import cn.auroralab.devtrack.dao.ProjectDAO;
+import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dto.ProjectDTO;
 import cn.auroralab.devtrack.exception.project.ProjectNotFoundException;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.form.UpdateProjectInformationForm;
 import cn.auroralab.devtrack.po.Project;
+import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.service.ProjectService;
 import cn.auroralab.devtrack.util.PageInformation;
 import cn.auroralab.devtrack.util.PaginationUtils;
@@ -21,9 +24,11 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectDAO projectDAO;
+    private final RoleDAO roleDAO;
 
-    public ProjectServiceImpl(ProjectDAO projectDAO) {
+    public ProjectServiceImpl(ProjectDAO projectDAO, RoleDAO roleDAO) {
         this.projectDAO = projectDAO;
+        this.roleDAO = roleDAO;
     }
 
     public void create(Project project)
@@ -37,8 +42,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectDAO.insert(project);
     }
 
-    public void update(UpdateProjectInformationForm form)
-            throws RequiredParametersIsEmptyException, ProjectNotFoundException {
+    public void update(String requesterUUID, UpdateProjectInformationForm form)
+            throws RequiredParametersIsEmptyException, ProjectNotFoundException, PermissionDeniedException {
         Validator.notEmpty(form.getProjectUUID());
 
         QueryWrapper<Project> queryWrapper = new QueryWrapper<>();
@@ -46,6 +51,11 @@ public class ProjectServiceImpl implements ProjectService {
 
         if (projectDAO.selectOne(queryWrapper) == null)
             throw new ProjectNotFoundException();
+
+        Role role = roleDAO.getRoleByUserInProject(requesterUUID, form.getProjectUUID());
+
+        if (role == null || !role.getUpdateProject())
+            throw new PermissionDeniedException();
 
         Project project = new Project();
         project.setName(form.getName());

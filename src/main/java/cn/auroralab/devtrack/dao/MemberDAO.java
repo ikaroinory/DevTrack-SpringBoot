@@ -12,25 +12,13 @@ public interface MemberDAO extends BaseMapper<Member> {
     /**
      * 插入一系列默认角色的用户-项目映射。
      *
-     * @param usernameList 用户名列表。
+     * @param userUUIDList 用户UUID列表。
      * @param projectUUID  项目uuid。
      * @return 成功添加的行数。
      * @author Guanyu Hu
      * @since 2022-12-04
      */
-    int newDefaultRecords(List<String> usernameList, String projectUUID);
-
-    /**
-     * 插入一系列指定角色的用户-项目映射。
-     *
-     * @param usernameList 用户名列表。
-     * @param projectUUID  项目uuid。
-     * @param roleUUID     角色uuid。
-     * @return 成功添加的行数。
-     * @author Guanyu Hu
-     * @since 2022-11-19
-     */
-    int newRecords(List<String> usernameList, String projectUUID, String roleUUID);
+    int newDefaultRecords(List<String> userUUIDList, String projectUUID);
 
     /**
      * 获取项目成员信息。

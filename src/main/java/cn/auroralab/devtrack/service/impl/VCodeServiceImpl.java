@@ -17,11 +17,11 @@ public class VCodeServiceImpl implements VCodeService {
 
     public VCodeServiceImpl(VCodeDAO vCodeDAO) { this.vCodeDAO = vCodeDAO; }
 
-    public VCodeRecord signUp(String email)
+    public VCodeRecord newRecord(String email, VCodeType type)
             throws RequiredParametersIsEmptyException, UnknownException {
         Validator.notEmpty(email);
 
-        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(VCodeType.SIGN_UP, email);
+        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(type, email);
 
         if (latestRecord != null)
             return latestRecord;
@@ -31,7 +31,7 @@ public class VCodeServiceImpl implements VCodeService {
 
         newRecord.setUuid(BitstreamGenerator.parseUUID());
         newRecord.setTime(generator.getStartTime());
-        newRecord.setType(VCodeType.SIGN_UP);
+        newRecord.setType(type);
         newRecord.setEmail(email);
         newRecord.setVCode(generator.getVCode());
         newRecord.setValidTime(generator.getValidTime());

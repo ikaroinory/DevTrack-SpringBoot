@@ -2,6 +2,7 @@ package cn.auroralab.devtrack.controller;
 
 import cn.auroralab.devtrack.annotation.SkipTokenVerification;
 import cn.auroralab.devtrack.enumeration.StatusCode;
+import cn.auroralab.devtrack.enumeration.VCodeType;
 import cn.auroralab.devtrack.exception.ResponseException;
 import cn.auroralab.devtrack.po.VCodeRecord;
 import cn.auroralab.devtrack.service.EmailService;
@@ -30,7 +31,7 @@ public class EmailController {
     public ResponseVO<String> sendSignUpVCodeEmail(String email) {
         VCodeRecord record;
         try {
-            record = vCodeService.signUp(email);
+            record = vCodeService.newRecord(email, VCodeType.SIGN_UP);
         } catch (ResponseException e) {
             return new ResponseVO<>(e.statusCode, null);
         }
@@ -39,14 +40,41 @@ public class EmailController {
         String invalidTimeString = invalidTime.toString().split("\\.")[0].replace("T", " ");
 
         String subject = "AuroraLab Verification Code";
-        String text = ResourceFileLoader.readFile("EmailTemplates/VCodeEmailTemplate.html")
+        String text = ResourceFileLoader.readFile("EmailTemplates/SignUp.html")
                 .replace("{{$vcode}}", record.getVCode())
                 .replace("{{$validTime}}", String.valueOf(record.getValidTime()))
                 .replace("{{$time}}", invalidTimeString)
                 .replace("{{$email}}", email);
 
         emailService.setText(text, true);
-        emailService.addImage("logo", "img/DevTrack_Title_NoBackground.png");
+        emailService.addImage("logo", "img/logo_long.png");
+        emailService.sendEmail(email, subject);
+
+        return new ResponseVO<>(StatusCode.SUCCESS, record.getUuid());
+    }
+
+    @PostMapping("/forgetVCode")
+    @SkipTokenVerification
+    public ResponseVO<String> sendForgetPasswordVCodeEmail(String email) {
+        VCodeRecord record;
+        try {
+            record = vCodeService.newRecord(email, VCodeType.RETRIEVE_PASSWORD);
+        } catch (ResponseException e) {
+            return new ResponseVO<>(e.statusCode, null);
+        }
+
+        LocalDateTime invalidTime = record.getTime().plusMinutes(record.getValidTime());
+        String invalidTimeString = invalidTime.toString().split("\\.")[0].replace("T", " ");
+
+        String subject = "AuroraLab Verification Code";
+        String text = ResourceFileLoader.readFile("EmailTemplates/RetrievePassword.html")
+                .replace("{{$vcode}}", record.getVCode())
+                .replace("{{$validTime}}", String.valueOf(record.getValidTime()))
+                .replace("{{$time}}", invalidTimeString)
+                .replace("{{$email}}", email);
+
+        emailService.setText(text, true);
+        emailService.addImage("logo", "img/logo_long.png");
         emailService.sendEmail(email, subject);
 
         return new ResponseVO<>(StatusCode.SUCCESS, record.getUuid());

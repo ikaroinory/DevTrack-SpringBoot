@@ -3,6 +3,8 @@ package cn.auroralab.devtrack.util;
 import cn.auroralab.devtrack.exception.system.InvalidParametersException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 
+import java.util.List;
+
 /**
  * 验证器。
  *
@@ -20,6 +22,32 @@ public class Validator {
     public static void notEmpty(String... args) throws RequiredParametersIsEmptyException {
         for (String arg : args)
             if (arg == null || arg.equals(""))
+                throw new RequiredParametersIsEmptyException();
+    }
+
+    /**
+     * 非空断言。
+     *
+     * @param args 参数列表。
+     * @author Guanyu Hu
+     * @since 2022-12-07
+     */
+    public static void notEmpty(List<?>... args) throws RequiredParametersIsEmptyException {
+        for (List<?> arg : args)
+            if (arg == null || arg.isEmpty())
+                throw new RequiredParametersIsEmptyException();
+    }
+
+    /**
+     * 非空断言。
+     *
+     * @param args 参数列表。
+     * @author Guanyu Hu
+     * @since 2022-12-08
+     */
+    public static void notNull(Object... args) throws RequiredParametersIsEmptyException {
+        for (Object arg : args)
+            if (arg == null)
                 throw new RequiredParametersIsEmptyException();
     }
 

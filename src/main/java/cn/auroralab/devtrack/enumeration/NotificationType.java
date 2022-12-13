@@ -6,33 +6,27 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
 /**
- * 任务类型。
+ * 通知类型。
  *
  * @author Guanyu Hu
- * @since 2022-11-10
+ * @since 2022-12-11
  */
 @AllArgsConstructor
-public enum TaskType implements Parseable {
+public enum NotificationType implements Parseable {
     /**
-     * 未知。
+     * 未知
      */
     UNKNOWN(0),
+
     /**
-     * 新功能。
+     * 系统通知。
      */
-    NEW_FEATURE(1),
+    SYSTEM(100),
+
     /**
-     * 修复缺陷。
+     * 项目邀请。
      */
-    BUGFIX(2),
-    /**
-     * 设计。
-     */
-    DESIGN(3),
-    /**
-     * 文档。
-     */
-    DOCS(4),
+    PROJECT_INVITATION(200),
     ;
 
     @EnumValue

@@ -60,7 +60,8 @@ public class RoleServiceImpl implements RoleService {
                 recordUUID,
                 projectUUID,
                 roleName,
-                true,
+                true, true, true,
+                true, true,
                 true, true, true,
                 true, true, true
         );
@@ -73,14 +74,7 @@ public class RoleServiceImpl implements RoleService {
             throws RequiredParametersIsEmptyException {
         String recordUUID = BitstreamGenerator.parseUUID();
 
-        Role role = new Role(
-                recordUUID,
-                projectUUID,
-                roleName,
-                false,
-                true, true, true,
-                false, false, false
-        );
+        Role role = new Role(recordUUID, projectUUID, roleName);
         roleDAO.insert(role);
 
         return recordUUID;
@@ -93,17 +87,16 @@ public class RoleServiceImpl implements RoleService {
         if (roleOfUser == null || !roleOfUser.getUpdateRole())
             throw new PermissionDeniedException();
 
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(Role.UUID, role.getUuid());
-
         Role newRole = new Role();
+        newRole.setUuid(role.getUuid());
+        newRole.setName(role.getName());
         newRole.setProject(null);
-        newRole.setInviteMembers(role.getInviteMembers());
+        newRole.setInviteMember(role.getInviteMember());
         newRole.setCreateTask(role.getCreateTask());
         newRole.setUpdateTask(role.getUpdateTask());
         newRole.setDeleteTask(role.getDeleteTask());
 
-        roleDAO.update(newRole, queryWrapper);
+        roleDAO.updateById(newRole);
     }
 
     public void removeRole(String requesterUUID, String roleUUID)

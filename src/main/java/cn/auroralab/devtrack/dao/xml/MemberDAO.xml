@@ -9,21 +9,8 @@
         user_uuid as user_uuid,
         (select default_role from projects where project_uuid = #{projectUUID}) as role
         from accounts
-        where username in
-        <foreach collection="usernameList" item="item" separator="," open="(" close=")">
-            #{item}
-        </foreach>
-    </insert>
-    <insert id="newRecords">
-        insert ignore into project_members (record_uuid, from_project, user_uuid, role)
-        select
-        replace(uuid(), '-', '') as record_uuid,
-        #{projectUUID} as from_project,
-        user_uuid as user_uuid,
-        #{roleUUID} as role
-        from accounts
-        where username in
-        <foreach collection="usernameList" item="item" separator="," open="(" close=")">
+        where user_uuid in
+        <foreach collection="userUUIDList" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
     </insert>
@@ -34,7 +21,6 @@
                username,
                nickname,
                avatar,
-               nicknameInProject,
                roleUUID,
                roleName,
                joinTime

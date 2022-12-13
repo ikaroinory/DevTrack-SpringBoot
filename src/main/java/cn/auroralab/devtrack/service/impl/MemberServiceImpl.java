@@ -1,10 +1,13 @@
 package cn.auroralab.devtrack.service.impl;
 
 import cn.auroralab.devtrack.dao.MemberDAO;
+import cn.auroralab.devtrack.dao.RoleDAO;
 import cn.auroralab.devtrack.dto.MemberDTO;
+import cn.auroralab.devtrack.exception.system.PermissionDeniedException;
 import cn.auroralab.devtrack.exception.system.RecordNotFoundException;
 import cn.auroralab.devtrack.exception.system.RequiredParametersIsEmptyException;
 import cn.auroralab.devtrack.po.Member;
+import cn.auroralab.devtrack.po.Role;
 import cn.auroralab.devtrack.service.MemberService;
 import cn.auroralab.devtrack.util.BitstreamGenerator;
 import cn.auroralab.devtrack.util.PageInformation;
@@ -22,12 +25,17 @@ import java.util.List;
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements MemberService {
     private final MemberDAO memberDAO;
+    private final RoleDAO roleDAO;
 
-    public MemberServiceImpl(MemberDAO memberDAO) {
+    public MemberServiceImpl(MemberDAO memberDAO, RoleDAO roleDAO) {
         this.memberDAO = memberDAO;
+        this.roleDAO = roleDAO;
     }
 
-    public int newDefaultRecords(List<String> usernameList, String projectUUID) {
+    public int newDefaultRecords(String requesterUUID, String projectUUID, List<String> usernameList)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(projectUUID);
+
         return memberDAO.newDefaultRecords(usernameList, projectUUID);
     }
 
@@ -42,21 +50,41 @@ public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements
         memberDAO.insert(member);
     }
 
-    public void updateMemberRole(String recordUUID, String roleUUID)
-            throws RequiredParametersIsEmptyException, RecordNotFoundException {
+    public void updateMemberRole(String requesterUUID, String recordUUID, String roleUUID)
+            throws RequiredParametersIsEmptyException, RecordNotFoundException, PermissionDeniedException {
         Validator.notEmpty(recordUUID, roleUUID);
 
         QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Member.UUID, recordUUID);
 
-        if (memberDAO.selectById(recordUUID) == null)
+        Member member = memberDAO.selectById(recordUUID);
+        if (member == null)
             throw new RecordNotFoundException();
 
-        Member member = new Member();
-        member.setUuid(recordUUID);
-        member.setRole(roleUUID);
+        Role role = roleDAO.getRoleByUserInProject(requesterUUID, member.getFromProject());
+        if (role == null || !role.getUpdateMember())
+            throw new PermissionDeniedException();
 
-        memberDAO.updateById(member);
+        Member newMember = new Member();
+        newMember.setUuid(recordUUID);
+        newMember.setRole(roleUUID);
+
+        memberDAO.updateById(newMember);
+    }
+
+    public void removeMembers(String requestUUID, List<String> recordUUIDList)
+            throws RequiredParametersIsEmptyException, PermissionDeniedException {
+        Validator.notEmpty(requestUUID);
+        Validator.notEmpty(recordUUIDList);
+
+        String projectUUID = memberDAO.selectById(recordUUIDList.get(0)).getFromProject();
+
+        Role role = roleDAO.getRoleByUserInProject(requestUUID, projectUUID);
+
+        if (role == null || !role.getRemoveMember())
+            throw new PermissionDeniedException();
+
+        removeByIds(recordUUIDList);
     }
 
     public List<MemberDTO> getMemberList(String projectUUID)

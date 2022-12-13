@@ -35,9 +35,6 @@ public interface AccountService {
      * 自动登录。
      *
      * @param userUUID 用户UUID。
-     * @return 用户头像。
-     * @throws RequiredParametersIsEmptyException 必填参数为空。
-     * @throws UserNotFoundException              用户不存在。
      * @author Guanyu Hu
      * @since 2022-12-04
      */
@@ -56,6 +53,19 @@ public interface AccountService {
      */
     void signUp(String username, String password, String email, String vCode)
             throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException;
+
+    /**
+     * 找回密码。
+     *
+     * @param username 用户名。
+     * @param password 新密码。
+     * @param email    邮箱。
+     * @param vCode    验证码。
+     * @author Guanyu Hu
+     * @since 2022-12-11
+     */
+    void retrievePassword(String username, String password, String email, String vCode)
+            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserNotFoundException, UnknownException;
 
     /**
      * 修改用户个人信息。

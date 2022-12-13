@@ -5,8 +5,9 @@
         select *
         from task_information
         where fromProjectUUID = #{projectUUID}
+        order by creationTime
     </select>
-    <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapData">
+    <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapDataDTO">
         select date_format(finish_time, '%Y-%m-%d') as date, count(*) as count
         from tasks,
              task_members
@@ -15,5 +16,41 @@
           and tasks.finish_time > date_sub(now(), interval 1 year)
         group by date
         order by date;
+    </select>
+    <select id="getTaskStatistics" resultType="cn.auroralab.devtrack.dto.TaskStatisticsDTO">
+        select creationList.date,
+               creationList.count as creation,
+               finishList.count   as completion
+        from (select date_format(creation_time, '%Y-%m%-%d') as date, count(*) as count
+              from tasks
+              where from_project = #{projectUUID}
+                and is_deleted = false
+              group by date
+              order by date) creationList
+                 left join (select date_format(finish_time, '%Y-%m%-%d') as date, count(*) as count
+                            from tasks
+                            where from_project = #{projectUUID}
+                              and is_deleted = false
+                              and finish_time is not null
+                            group by date
+                            order by date) finishList on creationList.date = finishList.date
+        union
+        select completionList.date,
+               createList.count     as creation,
+               completionList.count as completion
+        from (select date_format(creation_time, '%Y-%m%-%d') as date, count(*) as count
+              from tasks
+              where from_project = #{projectUUID}
+                and is_deleted = false
+              group by date
+              order by date) createList
+                 right join (select date_format(finish_time, '%Y-%m%-%d') as date, count(*) as count
+                             from tasks
+                             where from_project = #{projectUUID}
+                               and is_deleted = false
+                               and finish_time is not null
+                             group by date
+                             order by date) completionList on createList.date = completionList.date
+        order by date
     </select>
 </mapper>
