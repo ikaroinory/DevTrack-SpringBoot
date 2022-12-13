@@ -22,7 +22,7 @@ public interface MemberService extends IService<Member> {
      * @since 2022-12-04
      */
     int newDefaultRecords(String requesterUUID, String projectUUID, List<String> usernameList)
-            throws RequiredParametersIsEmptyException, PermissionDeniedException;
+            throws RequiredParametersIsEmptyException;
 
     /**
      * 插入一条用户-项目映射。

@@ -33,12 +33,22 @@ public interface NotificationService {
             throws RequiredParametersIsEmptyException, ProjectNotFoundException, PermissionDeniedException;
 
     /**
-     * 已读通知。
+     * 处理通知。
      *
      * @param notificationUUID 通知UUID。
      * @author Guanyu Hu
-     * @since 2022-12-12
+     * @since 2022-12-13
      */
-    void read(String notificationUUID)
+    void handled(String notificationUUID)
+            throws RequiredParametersIsEmptyException, NotificationNotFoundException, UnknownException;
+
+    /**
+     * 删除通知。
+     *
+     * @param notificationUUID 通知UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-13
+     */
+    void delete(String notificationUUID)
             throws RequiredParametersIsEmptyException, NotificationNotFoundException, UnknownException;
 }

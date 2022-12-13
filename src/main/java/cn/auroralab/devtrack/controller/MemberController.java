@@ -25,30 +25,14 @@ public class MemberController {
         this.notificationService = notificationService;
     }
 
-    @PostMapping("/add")
-    public ResponseVO<Integer> addMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> usernameList) {
-        String requesterUUID = JwtUtils.getUserUUID(authorization);
-
-        StatusCode statusCode = StatusCode.SUCCESS;
-        Integer count = null;
-
-        try {
-            count = memberService.newDefaultRecords(requesterUUID, projectUUID, usernameList);
-        } catch (ResponseException e) {
-            statusCode = e.statusCode;
-        }
-
-        return new ResponseVO<>(statusCode, count);
-    }
-
     @PostMapping("/invite")
-    public StatusCode inviteMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> recipientUUIDList) {
+    public StatusCode inviteMembers(@RequestHeader(value = "Authorization") String authorization, String projectUUID, @RequestParam List<String> usernameList) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            notificationService.newProjectInvitations(requesterUUID, projectUUID, recipientUUIDList);
+            notificationService.newProjectInvitations(requesterUUID, projectUUID, usernameList);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
@@ -57,7 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/accept")
-    public StatusCode acceptInvite(@RequestHeader(value = "Authorization") String authorization, String notificationUUID, String projectUUID) {
+    public StatusCode acceptInvitation(@RequestHeader(value = "Authorization") String authorization, String notificationUUID, String projectUUID) {
         String requesterUUID = JwtUtils.getUserUUID(authorization);
 
         StatusCode statusCode = StatusCode.SUCCESS;
@@ -67,7 +51,7 @@ public class MemberController {
 
         try {
             memberService.newDefaultRecords(requesterUUID, projectUUID, list);
-            notificationService.read(notificationUUID);
+            notificationService.handled(notificationUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }
@@ -76,11 +60,11 @@ public class MemberController {
     }
 
     @PostMapping("/ignore")
-    public StatusCode ignoreInvite(String notificationUUID) {
+    public StatusCode ignoreInvitation(String notificationUUID) {
         StatusCode statusCode = StatusCode.SUCCESS;
 
         try {
-            notificationService.read(notificationUUID);
+            notificationService.handled(notificationUUID);
         } catch (ResponseException e) {
             statusCode = e.statusCode;
         }

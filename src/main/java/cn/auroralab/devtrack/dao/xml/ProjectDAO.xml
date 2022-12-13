@@ -29,6 +29,6 @@
                        from projects,
                             project_members
                        where projects.project_uuid = project_members.from_project
-                         and user_uuid = 'e64c6039e12244efb9894ad9f3cb272c')
+                         and user_uuid = #{userUUID})
     </select>
 </mapper>

@@ -33,13 +33,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberDAO, Member> implements
     }
 
     public int newDefaultRecords(String requesterUUID, String projectUUID, List<String> usernameList)
-            throws RequiredParametersIsEmptyException, PermissionDeniedException {
+            throws RequiredParametersIsEmptyException {
         Validator.notEmpty(projectUUID);
-
-        Role role = roleDAO.getRoleByUserInProject(requesterUUID, projectUUID);
-
-        if (role == null || !role.getInviteMember())
-            throw new PermissionDeniedException();
 
         return memberDAO.newDefaultRecords(usernameList, projectUUID);
     }

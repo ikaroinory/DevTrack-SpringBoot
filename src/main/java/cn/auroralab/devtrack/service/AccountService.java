@@ -65,7 +65,7 @@ public interface AccountService {
      * @since 2022-12-11
      */
     void retrievePassword(String username, String password, String email, String vCode)
-            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException;
+            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserNotFoundException, UnknownException;
 
     /**
      * 修改用户个人信息。

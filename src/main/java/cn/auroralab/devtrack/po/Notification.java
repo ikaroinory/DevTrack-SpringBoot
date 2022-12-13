@@ -21,8 +21,10 @@ public class Notification implements Serializable {
     public static final String TYPE = "type";
     public static final String TIME = "send_time";
     public static final String RECIPIENT = "recipient";
+    public static final String TITLE = "notification_title";
     public static final String CONTEXT = "notification_context";
-    public static final String READ_TIME = "read_time";
+    public static final String HANDLING_TIME = "handling_time";
+    public static final String DELETE_TIME = "delete_time";
     public static final String PARAM_UUID = "extra_param";
 
     /**
@@ -46,15 +48,25 @@ public class Notification implements Serializable {
     @TableField(value = RECIPIENT)
     private String recipient;
     /**
+     * 通知标题。
+     */
+    @TableField(value = TITLE)
+    private String title;
+    /**
      * 通知内容。
      */
     @TableField(value = CONTEXT)
     private String context;
     /**
-     * 已读时间。
+     * 处理时间。
      */
-    @TableField(value = READ_TIME)
-    private LocalDateTime readTime;
+    @TableField(value = HANDLING_TIME)
+    private LocalDateTime handlingTime;
+    /**
+     * 删除时间。
+     */
+    @TableField(value = DELETE_TIME)
+    private LocalDateTime deleteTime;
     /**
      * 额外参数。
      */

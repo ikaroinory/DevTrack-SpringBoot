@@ -105,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void retrievePassword(String username, String password, String email, String vCode)
-            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserExistedException, UnknownException {
+            throws RequiredParametersIsEmptyException, VCodeRecordNotFoundException, VCodeErrorException, UserNotFoundException, UnknownException {
         Validator.notEmpty(username, password, email, vCode);
 
         VCodeRecord latestRecord = vCodeDAO.getLatestRecord(VCodeType.RETRIEVE_PASSWORD, email);
@@ -119,8 +119,8 @@ public class AccountServiceImpl implements AccountService {
 
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Account.USERNAME, username);
-        if (accountDAO.selectOne(queryWrapper) != null)
-            throw new UserExistedException();
+        if (accountDAO.selectOne(queryWrapper) == null)
+            throw new UserNotFoundException();
 
         Account account = new Account();
         account.setPasswordDigest(BitstreamGenerator.parseMD5(password));

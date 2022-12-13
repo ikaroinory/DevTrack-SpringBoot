@@ -21,7 +21,7 @@ public class VCodeServiceImpl implements VCodeService {
             throws RequiredParametersIsEmptyException, UnknownException {
         Validator.notEmpty(email);
 
-        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(VCodeType.RETRIEVE_PASSWORD, email);
+        VCodeRecord latestRecord = vCodeDAO.getLatestRecord(type, email);
 
         if (latestRecord != null)
             return latestRecord;
