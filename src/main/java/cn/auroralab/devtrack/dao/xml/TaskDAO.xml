@@ -22,7 +22,7 @@
              task_members
         where task_information.taskUUID = task_members.task_uuid
           and user_uuid = #{userUUID}
-          and deadline = current_date()
+          and date_format(deadline, '%Y-%m-%d') = current_date()
           and finishTime is null
         order by creationTime
     </select>
