@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.auroralab</groupId>
     <artifactId>DevTrack-SpringBoot</artifactId>
-    <version>0.1.0-GA</version>
+    <version>0.1.1-GA</version>
     <name>DevTrack-SpringBoot</name>
     <description>DevTrack web service application</description>
     <properties>
