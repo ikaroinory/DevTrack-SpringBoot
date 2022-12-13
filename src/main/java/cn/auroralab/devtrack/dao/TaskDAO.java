@@ -23,6 +23,24 @@ public interface TaskDAO extends BaseMapper<Task> {
     List<TaskDTO> getTaskList(String projectUUID);
 
     /**
+     * 获取用户任务信息
+     *
+     * @param userUUID 用户UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-13
+     */
+    List<TaskDTO> getTasksFromUser(String userUUID);
+
+    /**
+     * 获取用户日程。
+     *
+     * @param userUUID 用户UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-13
+     */
+    List<TaskDTO> getUsersSchedule(String userUUID);
+
+    /**
      * 获取用户过去一年完成的任务数量表，以天为单位统计。
      *
      * @param userUUID 用户UUID。

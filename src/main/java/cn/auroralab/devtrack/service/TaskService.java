@@ -40,6 +40,28 @@ public interface TaskService {
             throws RequiredParametersIsEmptyException;
 
     /**
+     * 获取一页成员任务信息。
+     *
+     * @param userUUID 用户UUID。
+     * @param pageNum  页码。
+     * @param pageSize 每页大小。
+     * @author Guanyu Hu
+     * @since 2022-12-13
+     */
+    PageInformation<TaskDTO> getTasksFromUser(String userUUID, int pageNum, int pageSize)
+            throws RequiredParametersIsEmptyException;
+
+    /**
+     * 获取用户日程。
+     *
+     * @param userUUID 用户UUID。
+     * @author Guanyu Hu
+     * @since 2022-12-13
+     */
+    List<TaskDTO> getUsersSchedule(String userUUID)
+            throws RequiredParametersIsEmptyException;
+
+    /**
      * 获取任务成员列表。
      *
      * @param taskUUID 任务UUID。

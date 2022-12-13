@@ -100,6 +100,25 @@ public class TaskServiceImpl implements TaskService {
         return PaginationUtils.parsePageInformation(pageInfo);
     }
 
+    public PageInformation<TaskDTO> getTasksFromUser(String userUUID, int pageNum, int pageSize)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(userUUID);
+
+        PageInfo<TaskDTO> pageInfo;
+        try (Page<Object> ignored = PageHelper.startPage(pageNum, pageSize)) {
+            List<TaskDTO> list = taskDAO.getTasksFromUser(userUUID);
+            pageInfo = new PageInfo<>(list);
+        }
+        return PaginationUtils.parsePageInformation(pageInfo);
+    }
+
+    public List<TaskDTO> getUsersSchedule(String userUUID)
+            throws RequiredParametersIsEmptyException {
+        Validator.notEmpty(userUUID);
+
+        return taskDAO.getUsersSchedule(userUUID);
+    }
+
     public List<TaskMemberDTO> getTaskMemberList(String taskUUID)
             throws RequiredParametersIsEmptyException {
         Validator.notEmpty(taskUUID);

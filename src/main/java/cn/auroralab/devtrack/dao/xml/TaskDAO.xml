@@ -7,13 +7,34 @@
         where fromProjectUUID = #{projectUUID}
         order by creationTime
     </select>
+    <select id="getTasksFromUser" resultType="cn.auroralab.devtrack.dto.TaskDTO">
+        select *
+        from task_information,
+             task_members
+        where task_information.taskUUID = task_members.task_uuid
+          and user_uuid = #{userUUID}
+          and finishTime is null
+        order by creationTime
+    </select>
+    <select id="getUsersSchedule" resultType="cn.auroralab.devtrack.dto.TaskDTO">
+        select *
+        from task_information,
+             task_members
+        where task_information.taskUUID = task_members.task_uuid
+          and user_uuid = #{userUUID}
+          and deadline = current_date()
+          and finishTime is null
+        order by creationTime
+    </select>
     <select id="getTaskCountFinishedInThePastYear" resultType="cn.auroralab.devtrack.dto.HeatMapDataDTO">
         select date_format(finish_time, '%Y-%m-%d') as date, count(*) as count
         from tasks,
-             task_members
+            task_members
         where task_members.user_uuid = #{userUUID}
           and tasks.task_uuid = task_members.task_uuid
-          and tasks.finish_time > date_sub(now(), interval 1 year)
+          and tasks.finish_time
+            > date_sub(now()
+            , interval 1 year)
         group by date
         order by date;
     </select>
