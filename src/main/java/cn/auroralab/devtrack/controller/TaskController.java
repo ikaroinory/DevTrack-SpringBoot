@@ -54,6 +54,38 @@ public class TaskController {
         return new ResponseVO<>(statusCode, pageInformation);
     }
 
+    @GetMapping("/getOnePageFromUser")
+    public ResponseVO<PageInformation<TaskDTO>> getTasksFromUser(@RequestHeader(value = "Authorization") String authorization, int pageNum, int pageSize) {
+        String userUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+        PageInformation<TaskDTO> pageInformation = null;
+
+        try {
+            pageInformation = taskService.getTasksFromUser(userUUID, pageNum, pageSize);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, pageInformation);
+    }
+
+    @GetMapping("/getSchedule")
+    public ResponseVO<List<TaskDTO>> getUsersSchedule(@RequestHeader(value = "Authorization") String authorization) {
+        String userUUID = JwtUtils.getUserUUID(authorization);
+
+        StatusCode statusCode = StatusCode.SUCCESS;
+        List<TaskDTO> pageInformation = null;
+
+        try {
+            pageInformation = taskService.getUsersSchedule(userUUID);
+        } catch (ResponseException e) {
+            statusCode = e.statusCode;
+        }
+
+        return new ResponseVO<>(statusCode, pageInformation);
+    }
+
     @GetMapping("/getTaskMembers")
     public ResponseVO<List<TaskMemberDTO>> getTaskMemberList(String taskUUID) {
         StatusCode statusCode = StatusCode.SUCCESS;
